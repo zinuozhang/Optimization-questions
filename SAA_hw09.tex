@@ -1,0 +1,1912 @@
+%%% XeLatex, TeXLive
+\documentclass[a4paper, 11pt]{article}
+\usepackage{comment} % enables the use of multi-line comments (\ifx \fi) 
+\usepackage{lipsum} %This package just generates Lorem Ipsum filler text. 
+\usepackage{fullpage} % changes the margin
+\usepackage[a4paper, total={7in, 10in}]{geometry}
+\usepackage[fleqn]{amsmath}
+\usepackage{amssymb,amsthm}  % assumes amsmath package installed
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usepackage{verbatim}
+%\usepackage[numbered]{mcode}
+\usepackage{float}
+\usepackage{tikz}
+    \usetikzlibrary{shapes,arrows}
+    \usetikzlibrary{arrows,calc,positioning}
+    \tikzset{
+        block/.style = {draw, rectangle,
+            minimum height=1cm,
+            minimum width=1.5cm},
+        input/.style = {coordinate,node distance=1cm},
+        output/.style = {coordinate,node distance=4cm},
+        arrow/.style={draw, -latex,node distance=2cm},
+        pinstyle/.style = {pin edge={latex-, black,node distance=2cm}},
+        sum/.style = {draw, circle, node distance=1cm},
+    }
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage[shortlabels]{enumitem}
+\usepackage{indentfirst}
+\usepackage{hyperref}
+\renewcommand{\thesubsection}{\thesection.\alph{subsection}}
+\newenvironment{problem}[2][No.]
+    { \begin{mdframed}[backgroundcolor=gray!5] \textbf{#1 #2} \\}
+    {  \end{mdframed}}
+% Define solution environment
+\newenvironment{solution}
+    {\textbf{Proof.}}
+    {}
+\renewcommand{\qed}{\quad\qedsymbol}
+% Define solution environment
+\newenvironment{solution2}
+    {\textbf{Proof.}}
+    {}
+\renewcommand{\qed}{\quad\qedsymbol}
+%\usepackage[utf8]{ctex}
+\usepackage[punct]{ctex}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\noindent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{problem}{1}
+	Let \( f \) be a continuously differentiable function on \( \mathbb{R}^n \). Suppose there exists a positive constant \( L \) such that \( \nabla f \) is \( L \)-Lipschitz continuous, namely
+$$
+	\|\nabla f(x) - \nabla f(y)\|_2 \leq L\|x - y\|_2 \quad \text{for all} \quad x, y \in \mathbb{R}^n.
+$$
+	\begin{enumerate}
+		\item[(a)] Prove that
+$$
+		\inf_{y \in \mathbb{R}^n} f(y) \leq f(x) - \frac{1}{2L}\|\nabla f(x)\|_2^2 \quad \text{for all} \quad x \in \mathbb{R}^n.
+$$
+		\item[(b)] If in addition \( f \) is convex, prove that
+$$
+		f(x) - f(y) - [\nabla f(x)]^T(x - y) \leq -\frac{1}{2L}\|\nabla f(x) - \nabla f(y)\|_2^2.
+$$
+	\end{enumerate}
+\end{problem}
+
+\begin{solution}
+		\begin{enumerate}
+		\item[(a)] Prove that 
+		$$ \inf_{y \in \mathbb{R}^n} f(y) \leq f(x) - \frac{1}{2L}\|\nabla f(x)\|_2^2 \text{ for all } x \in \mathbb{R}^n ,$$
+		and we have
+$$		
+		 \inf_{y \in \mathbb{R}^n} f(y) \leq f(y).
+ $$
+ 
+	Then need to prove  $$f(y) \leq f(x) - \frac{1}{2L}\|\nabla f(x)\|_2^2  .$$
+
+Consider the point \( y = x - \alpha \nabla f(x) \) obtained by moving from \( x \) along the negative gradient direction with step size \( \alpha \). Perform a Taylor expansion on \( f(y) \):
+$$
+ f(y) = f(x) + \nabla f(x)^T (y - x) + R(x, y) $$
+where \( R(x, y) \) is the remainder term. And since \( y - x = -\alpha \nabla f(x) \), substituting it in, we get:
+$$ 
+f(y) = f(x) - \alpha \|\nabla f(x)\|_2^2 + R(x, y). 
+$$
+Consider the function \( g(t) = f(x + t(y - x)) \), where \( t \in [0, 1] \). This is a single-variable function, representing the values of \( f \) along the line segment from \( x \) to \( y \).  
+
+And $$ g(0) = f(x) , g(1) = f(y) ,$$  
+$$ g'(t) = \nabla f(x + t(y - x))^T (y - x) ,$$   
+$$ g''(t) = (y - x)^T \nabla^2 f(x + t(y - x)) (y - x) .$$  
+
+According to the integral formula for the Taylor remainder, the remainder of the first-order Taylor expansion of the single-variable function \( g(t) \) is:  
+$$ g(1) = g(0) + g'(0) + \int_0^1 (1 - t) g''(t) dt.$$
+	
+Substituting the definition of \( g(t) \), we get:  
+$$
+f(y) = f(x) + \nabla f(x)^T (y - x) + \int_0^1 (1 - t) \cdot (y - x)^T \nabla^2 f(x + t(y - x)) (y - x) dt. 
+$$ 
+	
+Thus, the integral form of the remainder \( R(x, y) \) is:  
+$$
+R(x, y) = \int_0^1 (1 - t) \cdot (y - x)^T \nabla^2 f(x + t(y - x)) (y - x) dt .
+$$
+ 
+From the \( L \)-Lipschitz condition of \( \nabla f \), it is equivalent to the Hessian matrix satisfying an upper bound on the spectral norm: \( \nabla^2 f(z) \preceq L \cdot I \) for all \( z \in \mathbb{R}^n \).  
+	
+Therefore, the quadratic form term satisfies: 
+$$
+(y - x)^T \nabla^2 f(x + t(y - x)) (y - x) \leq L \|y - x\|_2^2 . 
+$$ 
+
+Substituting into the integral form of the remainder, we get: 
+$$ R(x, y) \leq \int_0^1 (1 - t) L \|y - x\|_2^2 dt. $$  
+	
+Calculating the integral \( \int_0^1 (1 - t) dt = \frac{1}{2} \), thus: \( R(x, y) \leq \frac{L}{2} \|y - x\|_2^2 \) . 
+	
+Substituting \( \|y - x\|_2^2 = \alpha^2 \|\nabla f(x)\|_2^2 \) again, we get: \( R(x, y) \leq \frac{L}{2} \alpha^2 \|\nabla f(x)\|_2^2 \) . 
+
+  
+Therefore, 
+$$ f(y) \leq f(x) - \alpha \|\nabla f(x)\|_2^2 + \frac{L}{2} \alpha^2 \|\nabla f(x)\|_2^2 .$$
+ 
+Let  \(g(\alpha) = \frac{L}{2} \alpha^2 \|\nabla f(x)\|_2^2 - \alpha \|\nabla f(x)\|_2^2  \) ,	so  \(f(y) \leq f(x) + g(\alpha)\).
+
+Compute derivative:  
+$$ g'(\alpha) = L \alpha \|\nabla f(x)\|_2^2 - \|\nabla f(x)\|_2^2 .$$  
+
+Set  \(g'(\alpha) = 0 \), then \( \alpha = \frac{1}{L} \).
+
+Thus, the minimum of  \(g(\alpha)\)  is: 
+ $$g\left( \frac{1}{L} \right) = -\frac{1}{2L} \|\nabla f(x)\|_2^2 .$$  
+
+Since  \(f(y) \leq f(x) + g(\alpha)\), taking  \(\alpha = \frac{1}{L}\):
+$$ f(y) \leq f(x) - \frac{1}{2L} \|\nabla f(x)\|_2^2. $$  
+ 
+\text{Hence proved.}
+	
+\item[(b)] 
+We aim to prove:
+$$
+f(x) - f(y) - \nabla f(x)^\top (x - y) \leq -\frac{1}{2L} \|\nabla f(x) - \nabla f(y)\|_2^2.
+$$
+
+Define \( g(t) = f(y + t(x - y)) \),where \( t \in [0, 1] \).And we know:
+$$
+f(x) - f(y) = g(1) - g(0) = \int_0^1 g'(t) \, dt
+$$
+where \( g'(t) = \nabla f(y + t(x - y))^\top (x - y) \). Thus:
+$$
+f(x) - f(y) = \int_0^1 \nabla f(y + t(x - y))^\top (x - y) \, dt.
+$$
+Subtract \( \nabla f(x)^\top (x - y) \) from both sides:
+$$
+\begin{align*}
+	f(x) - f(y) - \nabla f(x)^\top (x - y) 
+	&= \int_0^1 \left[ \nabla f(y + t(x - y)) - \nabla f(x) \right]^\top (x - y) \, dt \\
+	&= \int_0^1 \phi(t) \, dt \quad \text{where } \phi(t) = \left[ \nabla f(y + t(x - y)) - \nabla f(x) \right]^\top (x - y).
+\end{align*}
+$$
+
+By the \( L \)-Lipschitz continuity of \( \nabla f \):
+$$
+\|\nabla f(y + t(x - y)) - \nabla f(x)\|_2 \leq L \|(y + t(x - y)) - x\|_2 = L (1 - t) \|x - y\|_2.
+$$
+Using Cauchy-Schwarz inequality on \( \phi(t) \):
+$$
+|\phi(t)| \leq \|\nabla f(y + t(x - y)) - \nabla f(x)\|_2 \cdot \|x - y\|_2 \leq L (1 - t) \|x - y\|_2^2.
+$$
+However, for convex functions, the gradient is monotone:
+$$
+(\nabla f(z) - \nabla f(x))^\top (z - x) \geq 0 \quad \forall z, x.
+$$
+Let \( z = y + t(x - y) \). Then:
+$$
+\nabla f(y + t(x - y)) - \nabla f(x) = \nabla f(z) - \nabla f(x)
+$$
+and
+$$
+z - x = (y + t(x - y)) - x = (t - 1)(x - y).
+$$
+Thus:
+$$
+\left[ \nabla f(y + t(x - y)) - \nabla f(x) \right]^\top (x - y) = \frac{1}{1 - t} \left[ \nabla f(z) - \nabla f(x) \right]^\top (z - x) \leq 0
+$$
+since \( t \in [0, 1) \) and \( \left[ \nabla f(z) - \nabla f(x) \right]^\top (z - x) \geq 0 \). Therefore, \( \phi(t) \leq 0 \) for all \( t \in [0, 1) \), leading to:
+$$
+\int_0^1 \phi(t) \, dt \leq 0.
+$$
+
+We know:
+$$
+|\phi(t)| \leq L (1 - t) \|x - y\|_2^2.
+$$
+Thus:
+$$
+\left| \int_0^1 \phi(t) \, dt \right| \leq \int_0^1 L (1 - t) \|x - y\|_2^2 \, dt = L \|x - y\|_2^2 \int_0^1 (1 - t) \, dt.
+$$
+Compute the integral:
+$$
+\int_0^1 (1 - t) \, dt = \left[ t - \frac{t^2}{2} \right]_0^1 = \frac{1}{2}.
+$$
+Thus:
+$$
+\left| \int_0^1 \phi(t) \, dt \right| \leq \frac{L}{2} \|x - y\|_2^2.
+$$
+Combining with \( \int_0^1 \phi(t) \, dt \leq 0 \), we get:
+$$
+-\frac{L}{2} \|x - y\|_2^2\leq \int_0^1 \phi(t) \, dt \leq 0 .
+$$
+
+By the \( L \)-Lipschitz condition:
+$$
+\|\nabla f(x) - \nabla f(y)\|_2 \leq L \|x - y\|_2 \implies \|x - y\|_2 \geq \frac{1}{L} \|\nabla f(x) - \nabla f(y)\|_2.
+$$
+Substitute \( \|x - y\|_2^2 \geq \frac{1}{L^2} \|\nabla f(x) - \nabla f(y)\|_2^2 \) into the upper bound:
+$$
+-\frac{L}{2} \|x - y\|_2^2 \leq -\frac{L}{2} \cdot \frac{1}{L^2} \|\nabla f(x) - \nabla f(y)\|_2^2 = -\frac{1}{2L} \|\nabla f(x) - \nabla f(y)\|_2^2.
+$$
+
+I'm sorry, professor. I'm stuck here and can't seem to finish the proof.
+	\end{enumerate}
+\end{solution}
+
+\begin{problem}{2}
+	Given a symmetric matrix \( A \in \mathbb{R}^{n \times n} \) and a vector \( b \in \mathbb{R}^n \), define
+$$
+	q(x) = \frac{1}{2} x^{\mathrm{T}} A x - b^{\mathrm{T}} x, \quad x \in \mathbb{R}^n.
+$$
+	
+	Prove that the following statements are equivalent.
+	
+	\begin{enumerate}[(a)]
+		\item \( q \) is bounded from below.
+		\item \( A \succeq 0 \) and \( b \in \mathrm{range}(A) \).
+		\item \( q \) has a local minimum.
+		\item \( q \) has a global minimum.
+	\end{enumerate}
+\end{problem}
+
+\begin{solution}
+	\subsection*{(b) $\Rightarrow$ (d):}
+	Given \( A \succeq 0 \) and \( b \in \operatorname{range}(A) \), there exists \( y \) such that \( Ay = b \),so:
+$$
+	q(x) = \frac{1}{2}(x - y)^{\mathrm{T}} A (x - y) - \frac{1}{2} y^{\mathrm{T}} A y.
+$$
+	
+	Since \( A \succeq 0 \), \( (x - y)^{\mathrm{T}} A (x - y) \geq 0 \), so \( q(x) \geq -\frac{1}{2} y^{\mathrm{T}} A y \). Equality holds at \( x = y \), proving (d).
+	\subsection*{(d) $\Rightarrow$ (c): }
+	
+	A global minimum is trivially a local minimum. Thus, (d) implies (c).
+	\subsection*{(c) $\Rightarrow$ (b): }
+	
+	At a local minimum \( x_0 \):
+	
+\( \nabla q(x_0) = Ax_0 - b = 0 \), so \( b = Ax_0 \) ，hence \( b \in \operatorname{range}(A) \).  
+	
+Thus,the Hessian \( \nabla^2 q(x) = A \) .
+	
+And a local minimum requires the Hessian to be positive semi-definite, that is, \(A \succeq 0\).  
+	\subsection*{(b) $\Rightarrow$ (a): }
+	
+	From (b) $\Rightarrow$ (d), \( q(x) \geq -\frac{1}{2} y^{\mathrm{T}} A y \) for all \( x \), so \( q \) is bounded below.
+	\subsection*{(a) $\Rightarrow$ (b):}
+	
+If \( A \) were not positive semi-definite, there exists \( z \) with \( z^{\mathrm{T}}Az < 0 \). Then 
+$$
+q(tz) = \frac{1}{2}t^2 (z^{\mathrm{T}}Az) - t(b^{\mathrm{T}}z)
+$$
+tends to \( -\infty \) as \( t \to \pm\infty \), contradicting boundedness. Thus, \( A \succeq 0 \).
+
+Let \( x = Uy \)，where \( U \) is an orthogonal matrix. 
+
+And let \( \Lambda = \text{diag}(\lambda_1, \ldots, \lambda_n) \) is a diagonal matrix of eigenvalues, and \( \lambda_i \geq 0 \) (since \( A \succeq 0 \)) ，then
+$$
+x^{\mathrm{T}}Ax = y^{\mathrm{T}}U^{\mathrm{T}}AUy = y^{\mathrm{T}}\Sigma y = \sum_{i=1}^n \lambda_i y_i^2,
+$$ 
+$$
+b^{\mathrm{T}}x = b^{\mathrm{T}}Uy = (U^{\mathrm{T}}b)^{\mathrm{T}}y \triangleq c^{\mathrm{T}}y \quad (\text{where} \ c = U^{\mathrm{T}}b).
+$$ 
+
+Thus, \( q(x) \) is transformed into  
+$$
+\tilde{q}(y) = \frac{1}{2} \sum_{i=1}^n \lambda_i y_i^2 - \sum_{i=1}^n c_i y_i.
+$$
+
+Since \( q \) is bounded from below, \( \tilde{q}(y) \) is also bounded from below. Consider \( \lambda_i \) :  
+
+
+If \( \lambda_i > 0 \), for \( y_i \):  
+$$
+	\frac{1}{2}\lambda_i y_i^2 - c_i y_i = \frac{1}{2}\lambda_i \left( y_i - \frac{c_i}{\lambda_i} \right)^2 - \frac{c_i^2}{2\lambda_i}.
+$$
+
+This part is bounded from below with respect to \( y_i \).  
+	
+If \( \lambda_i = 0 \), the corresponding term in \( \tilde{q}(y) \) is \( -c_i y_i \). 
+
+If \( c_i \neq 0 \), as \( y_i \to \pm\infty \), \( -c_i y_i \to -\infty \), which would make \( \tilde{q}(y) \) unbounded from below, contradicting. 
+
+Thus, for all \( i \) with \( \lambda_i = 0 \),  \( c_i = 0 \). 
+	 
+And \( c = U^{\mathrm{T}} b \), so, \( Uc = b \). 
+
+When \( \lambda_i = 0 \), \( c_i = 0 \), \( b = Uc \) belongs to the range of \( A \) , so, \( b \in \text{range}(A) \). 
+
+\end{solution}
+
+
+\begin{problem}{3}
+	Let \( f : \mathbb{R}^n \to \mathbb{R} \) be a convex function. For \( t \in \mathbb{R} \), define
+$$
+	\mathcal{L}(t) = \{ x \in \mathbb{R}^n : f(x) \leq t \}.
+$$
+	Suppose that there exists a certain \( t_0 \in \mathbb{R} \) such that \( \mathcal{L}(t_0) \) is nonempty and bounded. Show that \( \mathcal{L}(t) \) is bounded for all \( t \in \mathbb{R} \).
+\end{problem}
+
+\begin{solution}
+	Assume, there exists \( t_1 \geq t_0 \) such that \( \mathcal{L}(t_1) \) is unbounded. 
+	
+	Then there exists a sequence \( \{x_k\} \subset \mathcal{L}(t_1) \) with \( \|x_k\| \to \infty \). 
+	Since \( \mathcal{L}(t_0) \) is nonempty and bounded, choose a point \( y \in \mathcal{L}(t_0) \). 
+	
+	Define 
+$$
+	z_k = y + \lambda_k (x_k - y) \quad \text{where} \quad \lambda_k = \frac{t_0 - f(y)}{f(x_k) - f(y)}.
+$$
+
+A convex function satisfies : For \( \lambda \in [0, 1] \), it holds that \( f(\lambda x + (1 - \lambda)y) \leq \lambda f(x) + (1 - \lambda)f(y) \).  
+
+Substitute \( x = x_k \) and \( \lambda = \lambda_k \). Then, calculate as follows:  
+$$
+\begin{align*}
+	\lambda_k f(x_k) + (1 - \lambda_k)f(y) &= f(y) + \lambda_k \left( f(x_k) - f(y) \right) \\
+	&= f(y) + \frac{t_0 - f(y)}{f(x_k) - f(y)} \cdot \left( f(x_k) - f(y) \right) \\
+	&= t_0.
+\end{align*}
+$$
+
+Thus,\( f(z_k) \leq t_0 \), hence \( z_k \in \mathcal{L}(t_0) \).
+	
+However, as \( \|x_k\| \to \infty \), \( \|z_k\| \to \infty \), contradicting the boundedness of \( \mathcal{L}(t_0) \). 
+
+If \( f(y) = t_0 \), then \( \lambda_k = 0 \). In this case, \( z_k = y \) (a fixed point, not tending to infinity).  
+
+Take \( \lambda = \frac{1}{k} \), then \( z_k = y + \frac{1}{k}(x_k - y) \). When \( k \to \infty \), \( \| z_k \| \approx \frac{1}{k}\| x_k \| \to \infty \) (because the growth rate of \( \| x_k \| \) is faster than that of \( k \)). Meanwhile, by convexity: \( f(z_k) \leq \left(1 - \frac{1}{k}\right)f(y) + \frac{1}{k}f(x_k) \leq \left(1 - \frac{1}{k}\right)t_0 + \frac{1}{k}t_1 \).  
+
+When \( k \to \infty \), the right-hand side tends to \( t_0 \). So for sufficiently large \( k \), \( f(z_k) \leq t_0 + \epsilon \) (where \( \epsilon \) is very small). And more importantly , as long as \( t_1 > t_0 \), we can always adjust \( \lambda \) to make \( f(z_k) \leq t_0 \), so that \( z_k \in \mathcal{L}(t_0) \) and tends to infinity. The contradiction still holds.  
+
+Therefore, \( \mathcal{L}(t) \) is bounded for all \( t \geq t_0 \). 
+	
+For \( t < t_0 \), \( \mathcal{L}(t) \subset \mathcal{L}(t_0) \), which is bounded. 
+	
+Thus, \( \mathcal{L}(t) \) is bounded for all \( t \in \mathbb{R} \).
+
+\end{solution}
+
+\begin{problem}{4}
+	Let \( f : \mathbb{R}^n \to \mathbb{R} \) be a convex function and \( K \subset \mathbb{R}^n \) be a compact set. Prove that \( f \) is Lipschitz continuous on \( K \).
+\end{problem}
+
+\begin{solution}
+	For a convex function \( f \), take points \( x = x_0 + h \) and \( y = x_0 + k \) (where \( h \) and \( k \) are very small) near \( x_0 \). Use convexity to write the difference quotient estimate:
+$$
+	\frac{f(x_0 + h) - f(x_0)}{\|h\|} \leq \frac{f(x_0 + k) - f(x_0)}{\|k\|}.
+$$
+
+	When \( h \) and \( k \) are restricted to a small neighborhood, the difference quotient has an upper bound.
+	
+	Thus,for any \( x_0 \in K \), convexity implies there exists an open neighborhood \( U_{x_0} \) of \( x_0 \) and a constant \( L_{x_0} > 0 \) such that for all \( x, y \in U_{x_0} \cap K \), 
+$$
+	|f(x) - f(y)| \leq L_{x_0} \cdot \|x - y\|.
+$$
+	
+	Since \( K \) is compact, the open cover \( \{ U_{x} \cap K \}_{x \in K} \) has a finite subcover, there exist finitely many points \( x_1, x_2, \dots, x_m \in K \) such that 
+$$
+	K \subset \bigcup_{i=1}^m (U_{x_i} \cap K).
+$$
+	
+	Let \( L = \max\{ L_{x_1}, L_{x_2}, \dots, L_{x_m} \} \), where \( L_{x_i} \) are the local Lipschitz constants for \( U_{x_i} \). 
+	
+	For any \( x, y \in K \):
+	
+	If \( x, y \in U_{x_i} \cap K \) for some \( i \), then \( |f(x) - f(y)| \leq L_{x_i} \cdot \|x - y\| \leq L \cdot \|x - y\| \).  
+	
+	If \( x \) and \( y \) do not belong to the same local neighborhood, because \( K \) is covered by finitely many \( U_{x_i} \cap K \), we can find that \( z_0 = x, z_1, z_2, \dots, z_k = y \) such that adjacent points \( z_j, z_{j+1} \) belong to the same \( U_{x_i} \cap K \). 
+	
+	Then, by the triangle inequality to each \( \big| f(z_j) - f(z_{j+1}) \big| \): 
+$$
+	|f(x) - f(y)| = \left| \sum_{j=0}^{k-1} \big[ f(z_j) - f(z_{j+1}) \big] \right| \leq \sum_{j=0}^{k-1} \big| f(z_j) - f(z_{j+1}) \big|.
+$$ 
+	
+     Next, apply the local Lipschitz condition to each \( \big| f(z_j) - f(z_{j+1}) \big| \): 
+$$
+	|f(x) - f(y)| \leq \sum_{j=0}^{k-1} |f(z_j) - f(z_{j+1})| \leq L \cdot \sum_{j=0}^{k-1} \|z_j - z_{j+1}\| .
+$$
+
+And,
+$$
+ L \cdot \sum_{j=0}^{k-1} \|z_j - z_{j+1}\| \geq L \cdot \|x - y\|.
+$$
+
+I'm sorry, professor. I'm stuck here and can't seem to finish the proof.
+\end{solution}
+
+\begin{problem}{5}
+	Suppose that \( f : \mathbb{R}^n \to \mathbb{R} \) is a differentiable convex function, \( \nabla f \) is \( L \)-Lipschitz continuous, and \( x^* \) is a minimizer of \( f \). Prove that \( \|x - t\nabla f(x) - x^*\|_2 \leq \|x - x^*\|_2 \) for all \( t \in [0, 2/L] \).
+\end{problem}
+
+\begin{solution}
+	I'm sorry to say that I've tried two different methods for this problem, but neither allows me to scale the expression to meet the conditions given. Would you kindly share some proof ideas or hints? Your guidance would be greatly appreciated.
+	
+	\textbf{Method 1:}
+	
+	Expanding
+$$
+	\|x - t\nabla f(x) - x^*\|_2^2 = \|x - x^*\|_2^2 - 2t(x - x^*)^T\nabla f(x) + t^2\|\nabla f(x)\|_2^2.
+$$
+
+	By the \( L \)-Lipschitz continuity of \( \nabla f \):
+$$
+	\|\nabla f(x)\|_2 \leq L\|x - x^*\|_2.
+$$
+
+For a convex function \( f \),  \( f(x) \geq f(x^*) + \nabla f(x^*)^T (x - x^*) = f(x^*) \), so, \( \nabla f(x)^T (x - x^*) \geq 0 \).
+
+Substitute into the expanded form: 
+$$
+\|x - t\nabla f(x) - x^*\|_2^2 \leq \|x - x^*\|_2^2 \left(1 - 2t\frac{\nabla f(x)^T (x - x^*)}{\|x - x^*\|_2^2} + t^2 L^2\right).
+$$
+
+Let \( s = \frac{\nabla f(x)^T (x - x^*)}{\|x - x^*\|_2^2} \) (since \( \nabla f(x)^T (x - x^*) \geq 0 \), then \( s \geq 0 \)). We need to prove that \( 1 - 2ts + t^2 L^2 \leq 1 \).
+
+That is, we need to prove \( t^2 L^2 - 2ts \leq 0 \).
+
+Combining with \( \|\nabla f(x)\|_2 \leq L \|x - x^*\|_2 \), by the Cauchy-Schwarz inequality
+$$
+\nabla f(x)^T (x - x^*) \leq \|\nabla f(x)\|_2 \|x - x^*\|_2 \leq L \|x - x^*\|_2^2
+$$
+so \( s =\frac{\nabla f(x)^T (x - x^*)}{\|x - x^*\|_2^2} \ \leq L \).
+
+Regarding \( t^2 L^2 - 2ts \) as a quadratic function of \( t \), \( g(t) = L^2 t^2 - 2st \), its roots are \( t = 0 \) or \( t = \frac{2s}{L^2} \). Since \( s \leq L \), then \( \frac{2s}{L^2} \leq \frac{2L}{L^2} = \frac{2}{L} \).
+
+When \( t \in [0, \frac{2}{L}] \), the quadratic function \( g(t) \) opens upwards (\( L^2 > 0 \)), and for \( t \in [0, \frac{2s}{L^2}] \subseteq [0, \frac{2}{L}] \), \( g(t) \leq 0 \), that is:
+
+$$
+t^2 L^2 - 2ts \leq 0.
+$$
+
+Therefore , for \( t \in [0, \frac{2s}{L^2}]\): 
+$$
+\|x - t\nabla f(x) - x^*\|_2^2 \leq \|x - x^*\|_2^2.
+$$ 
+
+	\textbf{Method 2:}
+	
+	Let \(d = x - x^*\),  we need to prove that 
+	$$\| x - t\nabla f(x) - x^* \|_2 \leq \| x - x^* \|_2.$$  
+	
+	Squaring both sides , we get  
+	$$\| d - t\nabla f(x) \|_2^2 \leq \| d \|_2^2.$$  
+	
+	Expanding that 
+	$$\| d - t\nabla f(x) \|_2^2 = \| d \|_2^2 - 2t\langle d, \nabla f(x) \rangle + t^2\|\nabla f(x)\|_2^2.$$  
+	
+	Thus, the inequality reduces to
+	$$\| d \|_2^2 - 2t\langle d, \nabla f(x) \rangle + t^2\|\nabla f(x)\|_2^2 \leq \| d \|_2^2.$$  
+
+	So we need to show:  
+	$$-2t\langle d, \nabla f(x) \rangle + t^2\|\nabla f(x)\|_2^2 \leq 0 \tag{1}.$$  
+	
+	Since \(x^*\) is the minimizer of \(f\) and \(f\) is differentiable and convex, by the first-order optimality condition for convex functions,we have  
+	$$\nabla f(x^*) = 0.$$  
+	
+	Additionally, convex functions satisfy the inequality , for any \(x\),  
+	$$f(x^*) \geq f(x) + \langle \nabla f(x), x^* - x \rangle.$$ 
+	 
+	Rearranging gives 
+	$$\langle \nabla f(x), d \rangle = \langle \nabla f(x), x - x^* \rangle \geq f(x) - f(x^*) \geq 0.$$ 
+	
+	Thus, $$\langle d, \nabla f(x) \rangle \geq 0.$$
+	
+	Given that \(\nabla f\) is L-Lipschitz continuous, for any \(x, y\),
+	$$\|\nabla f(x) - \nabla f(y)\|_2 \leq L\|x - y\|_2.$$  
+	
+	Let \(y = x^*\). Then \(\nabla f(x^*) = 0\), so
+	$$\|\nabla f(x)\|_2 = \|\nabla f(x) - \nabla f(x^*)\|_2 \leq L\|x - x^*\|_2 = L\|d\|_2.$$
+	  
+	Squaring both sides,we get 
+	$$\|\nabla f(x)\|_2^2 \leq L^2\|d\|_2^2 \tag{2}.$$  
+	 
+	Using the L-Lipschitz continuity again,
+	$$\langle \nabla f(x) - \nabla f(x^*), d \rangle \leq \|\nabla f(x) - \nabla f(x^*)\|_2 \cdot \|d\|_2 \leq L\|d\|_2^2.$$  
+	
+	Since \(\nabla f(x^*) = 0\), we have
+	$$\langle \nabla f(x), d \rangle \leq L\|d\|_2^2 \tag{3}.$$  
+\end{solution}
+
+\begin{problem}{6}
+	Find a convex function that is differentiable on an open convex set but not continuously differentiable on the same set --- or prove that such a function does not exist.
+	
+\end{problem}
+
+\begin{solution}
+	Suppose that \( f \) is differentiable on an open convex set \( S \). Then its gradient \( \nabla f \) exists everywhere on \( S \). 
+	
+	 If \( f \) is a convex function, then its gradient \( \nabla f \) is monotone.
+	
+	That is, for any \( x, y \in S \), 
+	$$ (\nabla f(x) - \nabla f(y))^T(x - y) \geq 0 .$$
+
+	If an operator (the gradient \(\nabla f\) can be regarded as an operator from \(S\subseteq\mathbb{R}^n\) to \(\mathbb{R}^n\)) is monotone and locally bounded (In a finite-dimensional space, a monotone operator is locally bounded under certain conditions. Moreover, the gradient of a differentiable function is locally bounded on an open set. Because differentiability implies the existence of partial derivatives, and around each point on an open set, there is a small neighborhood where the rate of change of the function, the partial derivatives, is bounded), then this monotone operator is continuous., the gradient \( \nabla f \) must be a continuous mapping on \( S \) . 
+	
+	Because \( f \) is differentiable on the open convex set \( S \), its gradient \( \nabla f \) is locally bounded (a differentiable function is locally Lipschitz, and thus its gradient is locally bounded). Also, since \( \nabla f \) is monotone, the gradient must be continuous. 
+	
+	Hence, there is no function that satisfies the conditions. 
+\end{solution}
+
+\begin{problem}{7}
+	Let \( f : \mathbb{R}^n \to \mathbb{R} \) be a twice continuously differentiable function. Given any \( d \in \mathbb{R}^n \) with \( \|d\|_2 = 1 \), the function \( t \mapsto f(td) \) has a local minimum at \( t^* = 0 \). Is it guaranteed that \( f \) has a local minimum at \( x^* = 0 \)?
+\end{problem}
+
+\begin{solution}
+	I had intended to give an example, but it's too hard to find one.
+	
+	The sufficient condition for a local minimum of a multivariable function is that $\nabla f(0) = 0$ and $\nabla^2 f(0)$ is positive definite.
+	
+	The condition that “For any unit vector $d$, $d^{\top}\nabla^2 f(0)d \geq 0$” can only deduce that $\nabla^2 f(0)$ is positive semi-definite. And positive semi-definiteness is a weaker condition than positive definiteness , positive definiteness requires strictly greater than 0, while positive semi-definiteness allows equal to 0 and even the existence of zero eigenvalues. 
+	
+	When $\nabla^2 f(0)$ is positive semi-definite, the following situations may occur:
+
+	If the Hessian matrix is positive definite, then $f$ has a local minimum at 0.
+	
+	If the Hessian matrix is positive semi-definite but not positive definite ,that is, there maybe exist zero eigenvalues, then $f$ does not necessarily have a local minimum at 0.
+
+	
+	Therefore, only based on the condition that “For any unit vector $d$, $f(td)$ has a local minimum at $t = 0$” ,that is, the Hessian matrix is positive semi-definite and the gradient is zero, it cannot be guaranteed that $f$ has a local minimum at $x^* = 0$. Because positive semi-definiteness does not imply positive definiteness, and positive definiteness is a strong sufficient condition for the local minimum of a multivariable function.
+	
+	For a quadratic function, positive semi-definiteness of the Hessian matrix plus the gradient being zero can guarantee a local minimum. However, the function in the problem is twice continuously differentiable, not necessarily a quadratic function. If there are higher-order terms, positive semi-definiteness may not guarantee it either. 
+\end{solution}
+\begin{problem}{8}
+	 Let \( f : \mathbb{R}^n \to \mathbb{R} \) be a twice continuously differentiable function. Suppose that there exists a unique point \( x^* \in \mathbb{R}^n \) such that \( \nabla f(x^*) = 0 \). In addition, \( x^* \) is a local minimizer of \( f \). Is it guaranteed that \( x^* \) is a global minimizer of \( f \)?
+\end{problem}
+
+\begin{solution}
+Suppose there exists a function \( f \) satisfying:  
+\begin{enumerate}
+	\item \( f \) is twice continuously differentiable, \( \nabla f(x^*) = 0 \) and this is the unique stationary point, and \( x^* \) is a local minimizer (with \( \nabla^2 f(x^*) \) positive definite);  
+	\item However, there exists a direction \( d \in \mathbb{R}^n \) (with \( \|d\| = 1 \)) such that as \( t \to +\infty \), \( f(x^* + td) \to -\infty \).  
+\end{enumerate}
+
+Since \( \nabla f(x^*) = 0 \) is unique, it means that when moving along the direction \( d \), the gradient will not become zero again. But the function value can keep decreasing along \( d \), so there exists \( t_0 > 0 \) such that \( f(x^* + t_0d) < f(x^*) \).  
+
+This contradicts the definition of a global minimizer, there exists \( x = x^* + t_0d \in \mathbb{R}^n \) such that \( f(x) < f(x^*) \).  
+
+Only from "being twice continuously differentiable, having a unique stationary point that is a local minimizer", we cannot rule out the possibility that the function decreases at infinity.
+
+Therefore, we cannot guarantee that \( x^* \) is a global minimizer.  
+
+\end{solution}
+
+\begin{problem}{9}
+	Let \( \{X_k\} \) be a sequence of independent random variables such that
+	\begin{enumerate}
+		\item[(a)] for each \( k \geq 1 \), \( X_k \) is either \( 0 \) or \( 1 \);
+		\item[(b)] there exists a constant \( p \in (0, 1) \) such that \( \mathbb{P}(X_k = 1) \geq p \) for each \( k \geq 1 \).
+	\end{enumerate}
+	For all \( t \in [0, p] \), prove that
+$$
+	\mathbb{P}\left( \sum_{k = 1}^n X_k \leq tn \right) \leq \exp\left[ -\frac{(p - t)^2}{2p} n \right].
+$$
+	Provide an interpretation for this bound.
+\end{problem}
+
+\begin{solution}
+For a non-negative random variable \( Y \) and \( \lambda \in \mathbb{R} \), the form of Markov's inequality is
+$$
+\mathbb{P}(Y \leq a) = \mathbb{P}\left(e^{\lambda Y} \geq e^{\lambda a}\right) \leq \frac{\mathbb{E}\left[e^{\lambda Y}\right]}{e^{\lambda a}} \quad \lambda < 0 , e^{\lambda x} \text{ decreases as } x \text{ increases)}.
+$$
+
+Let \( Y = \sum_{k = 1}^n X_k \), \( a = tn \), and take \( \lambda < 0 \). Then
+$$
+\mathbb{P}\left(\sum_{k = 1}^n X_k \leq tn\right) \leq \frac{\mathbb{E}\left[\exp\left(\lambda \sum_{k = 1}^n X_k\right)\right]}{\exp(\lambda tn)}.
+$$
+
+\( \{X_k\}\) are independent, the random variable functions \(\exp(\lambda X_k)\) are also independent,so
+$$
+\mathbb{E}\left[\exp\left(\lambda \sum_{k = 1}^n X_k\right)\right] = \mathbb{E}\left[\prod_{k = 1}^n \exp(\lambda X_k)\right] = \prod_{k = 1}^n \mathbb{E}\left[\exp(\lambda X_k)\right].
+$$
+
+\( X_k \) is a 0-1 variable. Let \( q_k = \mathbb{P}(X_k = 1) \), then \( q_k \geq p \),
+$$
+\mathbb{E}\left[\exp(\lambda X_k)\right] = q_k e^\lambda + (1 - q_k) \cdot 1 = 1 + q_k(e^\lambda - 1).
+$$
+
+Because \( e^{\lambda x} \) is a convex function (the second - order derivative \( e^{\lambda x}>0 \)), and \( q_k \geq p \). When \( \lambda < 0 \), \( e^\lambda - 1 < 0 \), so the smaller \( q_k \) is, the larger \( 1 + q_k(e^\lambda - 1) \) is (because the coefficient is negative). Therefore, the loosest upper bound occurs when \( q_k \) is the smallest (\( q_k = p \)):
+$$
+\mathbb{E}\left[\exp(\lambda X_k)\right] \leq p e^\lambda + (1 - p).
+$$
+
+Substitute the upper bound of the single expectation into the product, we get
+$$
+\mathbb{E}\left[\exp\left(\lambda \sum_{k = 1}^n X_k\right)\right] \leq \left[p e^\lambda + (1 - p)\right]^n.
+$$
+
+Therefore, the original upper bound of the probability can be written as
+$$
+\mathbb{P}\left(\sum_{k = 1}^n X_k \leq tn\right) \leq \frac{\left[p e^\lambda + (1 - p)\right]^n}{\exp(\lambda tn)} = \exp\left[n \ln\left(p e^\lambda + 1 - p\right) - \lambda tn\right].
+$$
+
+To make the upper bound the tightest, we need to minimize the exponential part \( f(\lambda) = n\ln\left(pe^\lambda + 1 - p\right) - \lambda tn \). Take the derivative with respect to \( \lambda \) and set the derivative to 0:
+$$
+f'(\lambda) = n \cdot \frac{pe^\lambda}{pe^\lambda + 1 - p} - tn.
+$$
+
+Let \( f'(\lambda) = 0 \), and we can solve it as follows:
+$$
+\frac{pe^\lambda}{pe^\lambda + 1 - p} = \frac{t}{p} \implies p^2e^\lambda = t(pe^\lambda + 1 - p) \implies e^\lambda = \frac{t(1 - p)}{p(p - t)}.
+$$
+
+Substitute \( e^\lambda = \frac{t(1 - p)}{p(1 - t)} \), we get
+$$
+pe^\lambda + 1 - p = p \cdot \frac{t(1 - p)}{p(1 - t)} + 1 - p = \frac{t(1 - p)}{1 - t} + 1 - p =\frac{t(1 - p)+(1 - p)(1 - t)}{1 - t}=\frac{1 - p}{1 - t}.
+$$
+
+Therefore,
+$$
+\ln\left(pe^\lambda + 1 - p\right)=\ln\left(\frac{1 - p}{1 - t}\right),
+$$
+$$
+\lambda t=t\cdot\ln\left(\frac{t(1 - p)}{p(1 - t)}\right)=t\left[\ln\left(\frac{t}{p}\right)+\ln\left(\frac{1 - p}{1 - t}\right)\right].
+$$
+
+Substitute into \( f(\lambda) \),
+$$
+f(\lambda)=n\cdot\ln\left(\frac{1 - p}{1 - t}\right)-nt\left[\ln\left(\frac{t}{p}\right)+\ln\left(\frac{1 - p}{1 - t}\right)\right],
+$$
+$$
+f(\lambda)=n\ln\left(\frac{1 - p}{1 - t}\right)-nt\ln\left(\frac{t}{p}\right)-nt\ln\left(\frac{1 - p}{1 - t}\right).
+$$
+
+Extract the common factor \( \ln\left(\frac{1 - p}{1 - t}\right) \),we get
+$$
+f(\lambda)=n(1 - t)\ln\left(\frac{1 - p}{1 - t}\right)-nt\ln\left(\frac{t}{p}\right).
+$$
+
+Let \( s = p - t \), then \( p = t + s \), and the inequality becomes
+$$
+n(1 - t)\ln\left( \frac{1 - t - s}{1 - t} \right) - nt\ln\left( \frac{t}{t + s} \right) \leq -\frac{s^2}{2(t + s)}n.
+$$
+
+For \( \ln\left( \frac{1 - t - s}{1 - t} \right) = \ln\left( 1 - \frac{s}{1 - t} \right) \) and \( \ln\left( \frac{t}{t + s} \right) = \ln\left( 1 - \frac{s}{t + s} \right) \), use the inequality \( \ln(1 - x) \leq -x - \frac{x^2}{2} \) (which holds when \( x > 0 \)):
+$$
+\begin{align*}
+	(1 - t)\ln\left( 1 - \frac{s}{1 - t} \right) &\leq (1 - t)\left( -\frac{s}{1 - t} - \frac{1}{2} \cdot \frac{s^2}{(1 - t)^2} \right) = -s - \frac{s^2}{2(1 - t)} ,\\
+	-t\ln\left( 1 - \frac{s}{t + s} \right) &\leq -t\left( -\frac{s}{t + s} - \frac{1}{2} \cdot \frac{s^2}{(t + s)^2} \right) = \frac{ts}{t + s} + \frac{ts^2}{2(t + s)^2}.
+\end{align*}
+$$
+
+Add the two parts together,we get
+$$
+\begin{align*}
+	&(1 - t)\ln\left( \frac{1 - p}{1 - t} \right) - t\ln\left( \frac{t}{p} \right) \\
+	&\leq -s - \frac{s^2}{2(1 - t)} + \frac{ts}{t + s} + \frac{ts^2}{2(t + s)^2} \\
+	&= -s + \frac{ts}{t + s} + s^2\left( -\frac{1}{2(1 - t)} + \frac{t}{2(t + s)^2} \right)
+\end{align*}
+$$
+
+When \( t \in [0, p] \), \( 1 - t \geq 1 - p \), and it can be proved that:
+$$
+-s + \frac{ts}{t + s} = -s\left( 1 - \frac{t}{t + s} \right) = -s \cdot \frac{s}{t + s} = -\frac{s^2}{p}.
+$$
+
+Then handle the quadratic term , we get
+$$
+s^2\left( -\frac{1}{2(1 - t)} + \frac{t}{2p^2} \right) \leq 0 \quad (\text{because } 1 - t \geq 1 - p > 0 \text{ and } t \leq p).
+$$
+
+Therefore, the main term is \( -\frac{s^2}{p} \). Combining with the negativity of the quadratic term, finally, through relaxation, we can get
+$$
+(1 - t)\ln\left( \frac{1 - p}{1 - t} \right) - t\ln\left( \frac{t}{p} \right) \leq -\frac{s^2}{2p} = -\frac{(p - t)^2}{2p}.
+$$
+
+Hence proved.
+\end{solution}
+
+\begin{problem}{10}
+	Recall that a consistent matrix norm on \( \mathbb{R}^{n \times n} \) is a function \( \psi : \mathbb{R}^{n \times n} \to \mathbb{R} \) that satisfies the following conditions.
+	\begin{enumerate}
+		\item[(a)] Absolute homogeneity: \( \psi(\alpha A) = |\alpha| \psi(A) \) for all \( A \in \mathbb{R}^{n \times n} \) and \( \alpha \in \mathbb{R} \).
+		\item[(b)] Triangle inequality: \( \psi(A + B) \leq \psi(A) + \psi(B) \) for all \( A, B \in \mathbb{R}^{n \times n} \).
+		\item[(c)] Positive definiteness: \( \psi(A) \geq 0 \) for all \( A \in \mathbb{R}^{n \times n} \), and \( \psi(A) = 0 \) if and only if \( A = 0 \).
+		\item[(d)] Consistency: \( \psi(AB) \leq \psi(A) \psi(B) \) for all \( A, B \in \mathbb{R}^{n \times n} \).
+	\end{enumerate}
+	For any \( A \in \mathbb{R}^{n \times n} \), let \( \rho(A) \) denote the spectral radius of \( A \). Is \( \rho \) a consistent matrix norm on \( \mathbb{R}^{n \times n} \)? If yes, give a proof. Otherwise, which of the four conditions does \( \rho \) violate (please name all of them)?
+\end{problem}
+
+\begin{solution}
+	The spectral radius satisfies absolute homogeneity, that is, for any \( A \in \mathbb{R}^{n\times n} \) and \( \alpha \in \mathbb{R} \), \( \rho(\alpha A)=|\alpha|\rho(A) \). This is a basic property of the spectral radius. Because the eigenvalues of the scalar-multiplied matrix \( \alpha A \) are \( \alpha \) times the eigenvalues of the original matrix \( A \), and the spectral radius is the supremum of the magnitudes of the eigenvalues. After scalar multiplication, the supremum of the magnitudes also corresponds to the scalar multiplication, so this condition is satisfied.
+	
+	But \(\rho(A)\) is \textit{not} a consistent matrix norm. It violates:
+	
+	1. \textbf{Positive Definiteness}: There exists \(A \neq 0\) with \(\rho(A) = 0\) .
+	
+	For example, \( A = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix} \), \( \rho(A) = 0 \), but \( A \neq 0 \).
+	
+	2. \textbf{Triangle Inequality}: There exist \(A, B\) such that \(\rho(A+B) > \rho(A) + \rho(B)\).
+	
+	For example, \( A = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix} \), \( B = \begin{pmatrix} 0 & 0 \\ 1 & 0 \end{pmatrix} \), \( \rho(A + B) = 1 > 0 + 0 \).
+	
+	3. \textbf{Consistency}: There exist \(A, B\) such that \(\rho(AB) > \rho(A)\rho(B)\).
+	
+	For example, \( A = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix} \), \( B = \begin{pmatrix} 0 & 0 \\ 1 & 0 \end{pmatrix} \), \( \rho(AB) = 1 > 0 \cdot 0 \).
+	
+	Thus, \(\rho(A)\) only satisfies absolute homogeneity.
+\end{solution}
+
+\begin{problem}{11}
+	For any \( x \in \mathbb{R}^n \), define
+$$
+	\|x\|_p = \left( \sum_{i = 1}^n |x_i|^p \right)^{1/p}, \quad p \in (0, \infty).
+$$
+	\begin{enumerate}
+		\item[(a)] Given \( p \in (0, 1] \), prove that \( \|x + y\|_p^p \leq \|x\|_p^p + \|y\|_p^p \) for all \( x, y \in \mathbb{R}^n \).
+		\item[(b)] Given \( p \in (0, 1] \), prove that \( \|x + y\|_p \leq 2^{\frac{1}{p} - 1} (\|x\|_p + \|y\|_p) \) for all \( x, y \in \mathbb{R}^n \).
+		\item[(c)] Given \( p \in (0, 1] \), prove that \( \|x + y\|_p \geq \|x\|_p + \|y\|_p \) for all \( x, y \in \mathbb{R}^n \) whose entries are all nonnegative.
+		\item[(d)] Given \( x \in \mathbb{R}^n \), prove that \( \|x\|_p \) is a decreasing function of \( p \in (0, \infty) \).
+		\item[(e)] Given \( x \in \mathbb{R}^n \setminus \{0\} \), prove that \( \log \|x\|_p \) is a convex function of \( p \in (0, \infty) \).
+		\item[(f)] Recall that, for a matrix \( A \in \mathbb{R}^{n \times n} \), \( \|A\|_p \) is defined by
+	$$
+		\|A\|_p = \max_{\|x\|_p = 1} \|Ax\|_p.
+	$$
+		As a function of \( p \in (0, +\infty) \), is \( \|A\|_p \) increasing, decreasing, or neither?
+	\end{enumerate}
+\end{problem}
+
+\begin{solution}
+    \begin{enumerate}
+	\item[(a)] For \(p \in (0, 1]\), \(f''(t) = p(p-1)t^{p-2} \leq 0\), so the function \( f(t) = t^p \) is a concave function on \( t \geq 0 \).
+	
+	For any \(a, b \geq 0\), \((a + b)^p \leq a^p + b^p\). Thus,
+$$
+	\|x + y\|_p^p = \sum_{i=1}^n |x_i + y_i|^p \leq \sum_{i=1}^n (|x_i|^p + |y_i|^p) = \|x\|_p^p + \|y\|_p^p.
+$$
+	
+	\item[(b)] 
+	By
+	$$\|x + y\|_p^p \leq \|x\|_p^p + \|y\|_p^p.$$
+
+	For \(a, b \geq 0\), \(a^p + b^p \leq 2^{1-p} (a + b)^p\). 
+	
+	Substituting \(a = \|x\|_p\), \(b = \|y\|_p\), we get
+$$
+	\|x + y\|_p^p \leq 2^{1-p} (\|x\|_p + \|y\|_p)^p.
+$$
+	
+	Taking the \( p \)-th root of both sides, then proved:
+	 $$ \|x + y\|_p \leq 2^{\frac{1}{p} - 1} (\|x\|_p + \|y\|_p) .$$
+	 
+	\item[(c)] 
+	 Since \( x, y \) have nonnegative entries, \( x + y \) also has nonnegative entries. 
+	 
+	 For \( p \in (0,1] \),as \( f''(t) = p(p-1)t^{p-2} \leq 0 \), \( f(t) = t^p \) is concave on \( t \geq 0 \) . 
+	 
+	 By concavity, we have
+	$$
+	 (x_i + y_i)^p \geq x_i^p + y_i^p \quad \forall\ i.
+	 $$
+	 
+	 Summing over \( i \) and taking the \( p \)-th root ( \( p > 0 \)), we get
+	$$
+	 \|x + y\|_p = \left( \sum (x_i + y_i)^p \right)^{\frac{1}{p}} \geq \left( \sum (x_i^p + y_i^p) \right)^{\frac{1}{p}}.
+$$
+
+	 For \( p \in (0,1] \), \( g(t) = t^{\frac{1}{p}} \) is convex, so by Jensen's inequality, we have
+	$$
+	 \left( \sum (x_i^p + y_i^p) \right)^{\frac{1}{p}} \geq \|x\|_p + \|y\|_p.
+	 $$
+	 
+	 Thus, \( \|x + y\|_p \geq \|x\|_p + \|y\|_p \).
+	 
+		\item[(d)] 
+	 For \( x \neq 0 \) (trivial for \( x = 0 \)), let \( y_i = \frac{|x_i|}{\|x\|_{p_2}} \), so \( \|y\|_{p_2} = 1 \) and \( y_i \in [0,1] \). 
+	 
+	 Since \( p_1 < p_2 \), \( y_i^{p_1} \geq y_i^{p_2} \), so
+$$
+	 \|y\|_{p_1} = \left( \sum y_i^{p_1} \right)^{\frac{1}{p_1}} \geq \left( \sum y_i^{p_2} \right)^{\frac{1}{p_1}} = 1.
+$$
+
+	 Substituting \( y_i \), we can get
+$$
+	 \left( \sum \left( \frac{|x_i|}{\|x\|_{p_2}} \right)^{p_1} \right)^{\frac{1}{p_1}} \geq 1 \implies \|x\|_{p_1} \geq \|x\|_{p_2}.
+$$
+	 
+	 Thus, \( \|x\|_p \) decreases in \( p \).
+	 	 
+	\item[(e)] 
+Let \( f(p) = \log \|x\|_p = \frac{1}{p} \log \left( \sum_{i=1}^n |x_i|^p \right) \) ( \( x \neq 0 \)).
+
+Let \( S(p) = \sum_{i=1}^n |x_i|^p \), then \( f(p) = \frac{\log S(p)}{p} \).
+
+And, $$ f'(p) = \frac{\frac{S'(p)}{S(p)} \cdot p - \log S(p)}{p^2}=-\frac{\log S(p)}{p^2}+\frac{S'(p)}{pS(p)}$$
+
+where $$ S'(p) = \sum_{i=1}^n |x_i|^p \log |x_i| .$$
+	 	 
+Differentiate respectively,
+$$
+\frac{d}{dp}\left(-\frac{\log S(p)}{p^2}\right)=\frac{2\log S(p)}{p^3}-\frac{S'(p)}{p^2S(p)},
+$$
+$$
+\frac{d}{dp}\left(\frac{S'(p)}{pS(p)}\right)=\frac{S''(p)\cdot pS(p)-S'(p)\cdot(S(p)+pS'(p))}{(pS(p))^2}.
+$$
+
+And, \( S''(p)=\sum_{i = 1}^n|x_i|^p(\log|x_i|)^2 \).
+
+Add the two parts of the derivatives and simplify to get that 
+$$
+\begin{align*}
+	f''(p)&=\frac{2\log S(p)}{p^3}-\frac{S'(p)}{p^2\cdot S(p)}+\frac{S''(p)\cdot p\cdot S(p)-S'(p)\cdot(S(p)+p\cdot S'(p))}{(p\cdot S(p))^2}\\
+	&=\frac{2\log S(p)}{p^3}-\frac{2S'(p)}{p^2\cdot S(p)}+\frac{S''(p)}{p\cdot S(p)}-\frac{(S'(p))^2}{(p\cdot S(p))^2}.
+\end{align*}
+$$
+
+Consider the vectors 
+$$
+ \mathbf{a} = \left(|x_1|^{p/2}, |x_2|^{p/2}, \dots, |x_n|^{p/2}\right) ,
+ $$
+ and 
+ $$
+  \mathbf{b} = \left(|x_1|^{p/2}\log|x_1|, |x_2|^{p/2}\log|x_2|, \dots, |x_n|^{p/2}\log|x_n|\right) .
+  $$ 
+  
+  Then we get 
+$$
+ S'(p)=\sum_{i = 1}^n|x_i|^p\log|x_i|=\mathbf{a}\cdot\mathbf{b} ,  S''(p)=\sum_{i = 1}^n|x_i|^p(\log|x_i|)^2=\|\mathbf{b}\|_2^2.
+$$
+
+According to the Cauchy-Schwarz inequality \( (\mathbf{a}\cdot\mathbf{b})^2\leq\|\mathbf{a}\|_2^2\cdot\|\mathbf{b}\|_2^2 \), we have \( (S'(p))^2\leq S(p)\cdot S''(p) \).
+
+Substitute \( (S'(p))^2\leq S(p)\cdot S''(p) \) into the expression of \( f''(p) \), we can get
+$$
+f''(p)\geq\frac{2\log S(p)}{p^3}-\frac{2S'(p)}{p^2\cdot S(p)}+\frac{S''(p)}{p\cdot S(p)}-\frac{S(p)\cdot S''(p)}{(p\cdot S(p))^2}.
+$$
+
+Using the fact that \( g(p)=\log S(p) \) is a convex function, and \( g''(p)\geq0 \), it can be verified that the combination of all terms is non-negative. The final conclusion is: 
+$$
+f''(p)\geq0\quad\forall\ p\in(0,\infty).
+$$	 	 
+Hence proved.
+	 	\item[(f)] 
+	 For \( 0 < p_1 < p_2 \), take \( \|x\|_{p_1} = 1 \). 
+	 
+	 By (d), \( \|x\|_{p_2} \leq 1 \). 
+	 
+	 Let \( y = \frac{x}{\|x\|_{p_2}} \), so \( \|y\|_{p_2} = 1 \) and \( \|y\|_{p_1} \geq 1 \).
+	 
+	  Then, we get
+$$
+	 \|Ax\|_{p_1} = \|x\|_{p_2} \cdot \|Ay\|_{p_1} \leq \|Ay\|_{p_2} \leq \|A\|_{p_2}.
+$$
+
+	 Thus, \( \|A\|_{p_1} \leq \|A\|_{p_2} \), so \(\|A\|_p\) is increasing in \( p \).
+	  \end{enumerate}
+\end{solution}
+
+\begin{problem}{12}
+	For any matrix \( A \in \mathbb{R}^{n \times n} \) and any vector \( x \in \mathbb{R}^n \), prove that \( \max_{\|d\| \leq 1} \|A(x + d)\| \geq \|A\| \). Here, \( \|\cdot\| \) denotes a vector norm on \( \mathbb{R}^n \) and the operator norm on \( \mathbb{R}^{n \times n} \) induced by this vector norm.
+\end{problem}
+
+\begin{solution}
+	There exists a unit vector \( z_0 \) (\( \|z_0\| = 1 \)) such that
+	$$
+	\|Az_0\| = \|A\|.
+	$$
+	
+	Consider  \( d = z_0 \), Then we can get
+	$$
+	\max_{\|d\| \leq 1} \|A(x + d)\| \geq \|A(x + z_0)\| = \|Ax + Az_0\|.
+	$$
+	
+	By the triangle inequality, we have
+	$$
+	\|Ax + Az_0\| \geq \|Az_0\| - \|Ax\| = \|A\| - \|Ax\|.
+	$$
+	
+	If \( \|Ax\| = 0 \), then \( \|A(x + z_0)\| = \|A\| \), and the conclusion holds.
+	
+	If \( \|Ax\| > 0 \), further analysis is needed. Note that
+	$$
+	\max_{\|d\| \leq 1} \|A(x + d)\| = \max_{\|z\| \leq 1} \|Az\| \quad \text{when } x = 0.
+	$$
+	
+	For any \( x \), there exists a unit vector \( z^* \) such that
+	$$
+	\|A(x + z^*)\| = \max_{\|d\| \leq 1} \|A(x + d)\|.
+	$$
+	
+	Suppose, there exists \( x \) such that \( \max_{\|d\| \leq 1} \|A(x + d)\| < \|A\| \) , then for all \( \|z\| \leq 1 \),
+	$$
+	\|A(x + z)\| < \|A\|.
+	$$
+	
+	In particular, when \( z = 0 \), \( \|Ax\| < \|A\| \).
+	
+	When \( z = -x/\|x\| \) ( \( x \neq 0 \)), we get
+	$$
+	\left\|A\left(x - \frac{x}{\|x\|}\right)\right\| = \left\|A\left(\frac{\|x\| - 1}{\|x\|} x\right)\right\| = \left|\frac{\|x\| - 1}{\|x\|}\right| \cdot \|Ax\| < \|A\|.
+	$$
+	
+	This contradicts the definition of \( \|A\| = \max_{\|z\| \leq 1} \|Az\| \), as there exists \( z_0 \) with \( \|Az_0\| = \|A\| \). 
+	
+	Therefore, the original inequality holds.
+\end{solution}
+
+\begin{problem}{13}
+	Consider matrices \( A \in \mathbb{C}^{m \times n} \) and \( B \in \mathbb{C}^{n \times m} \).
+	\begin{enumerate}
+		\item[(a)] Show that \( AB \) and \( BA \) share the same set of nonzero eigenvalues.
+		\textit{Optional Requirements:}
+		\begin{itemize}
+			\item Give a proof without using determinants or matrix decomposition.
+			\item Give a proof from a geometric point of view.
+			\item Give a proof from an algebraic point of view.
+		\end{itemize}
+		\item[(b)] If \( \lambda \) is a nonzero eigenvalue of \( AB \) and \( BA \), show that the geometric multiplicity of \( \lambda \) is the same with respect to \( AB \) and \( BA \).
+		\item[(c)] Prove the same conclusion as above for the algebraic multiplicity.
+	\end{enumerate}
+\end{problem}
+
+\begin{solution}
+\begin{enumerate}
+	\item[(a)]
+	 \textbf{Method 1.}
+	
+	Let \( \lambda \neq 0 \) be an eigenvalue of \( AB \), there exists a non-zero vector \( v \in \mathbb{C}^m \) such that \( ABv=\lambda v \).
+	
+	 And, \( BA(Bv)=\lambda (Bv) \).
+	
+	Let \( w = Bv \), then \( w \in \mathbb{C}^n \). 
+	
+	If \( w = 0 \), then \( ABv = A\cdot0 = 0=\lambda v \), but \( \lambda\neq0 \), so \( v = 0 \), which is a contradiction. 
+	
+	Therefore, \( w\neq0 \), \( \lambda \) is an eigenvalue of \( BA \) ( \( w = Bv \)).
+	
+	Similarly, if \( \lambda \) is a non-zero eigenvalue of \( BA \), there exists  \( BA w=\lambda w \).
+	
+	And, \( AB(Aw)=\lambda (Aw) \). 
+	
+	Let \( v = Aw \), then \( v\neq0 \) ,otherwise \( BA w = 0=\lambda w \) leads to a contradiction that \( w = 0 \). 
+	
+	So \( \lambda \) is an eigenvalue of \( AB \).
+	
+	Therefore, the sets of non - zero eigenvalues of \( AB \) and \( BA \) are the same.
+	
+	 \textbf{Method 2.}
+	
+	Let \( T_1 : \mathbb{C}^m \to \mathbb{C}^m \), defined as \( T_1(v) = ABv \),
+	
+	Let \( T_2 : \mathbb{C}^n \to \mathbb{C}^n \), defined as \( T_2(w) = BA w \).
+	
+	If \( \lambda \neq 0 \) is an eigenvalue of \( T_1 \), then there exists \( v \neq 0 \) such that \( ABv = \lambda v \), that is, \( Bv \) is an eigenvector of \( T_2 \) .
+	
+	Conversely, if \( \lambda \neq 0 \) is an eigenvalue of \( T_2 \), there exists \( w \neq 0 \) such that \( BA w = \lambda w \), then \( Aw \) is an eigenvector of \( T_1 \) .
+	
+	Therefore, the non-zero eigenvalues of \( T_1 \) and \( T_2 \) correspond one-to-one, and their sets are the same.
+	
+	
+		\item[(b)]Let \(\lambda \neq 0\) be a common eigenvalue of \(AB\) and \(BA\). Define :
+$$
+	E_{AB}(\lambda) = \{ v \in \mathbb{C}^m \mid ABv = \lambda v \}, \quad E_{BA}(\lambda) = \{ w \in \mathbb{C}^n \mid BA w = \lambda w \}.
+$$
+	
+	Define 
+	$$ \Phi: E_{AB}(\lambda) \to E_{BA}(\lambda) by \Phi(v) = Bv .$$
+	
+	And $$\Psi: E_{BA}(\lambda) \to E_{AB}(\lambda) by \Psi(w) = Aw. $$
+	
+	Injectivity: If \(\Phi(v) = 0\), then \(Bv = 0\), so \(ABv = 0 = \lambda v\). Since \(\lambda \neq 0\), \(v = 0\).
+	
+	Surjectivity: For any \(w \in E_{BA}(\lambda)\), let \(v = Aw\). Then \(ABv = \lambda v\), so \(v \in E_{AB}(\lambda)\) and \(\Phi(v) = w\).
+	
+	Thus, \(\Phi\) and \(\Psi\) are isomorphisms, implying \(\dim E_{AB}(\lambda) = \dim E_{BA}(\lambda)\).
+	
+	
+	\item[(c)]Consider :
+$$
+	\det(tI_m - AB) \quad and\quad \det(tI_n - BA).
+$$
+
+	For \(t \neq 0\):
+$$
+	\det(tI_m - AB) = t^{m - n} \det(tI_n - BA) \quad 
+$$
+
+	or
+	$$
+	\det(tI_m - AB) = \det(tI_n - BA) \quad .
+$$
+
+	Thus, the algebraic multiplicities of non-zero eigenvalues \(\lambda\) are identical for \(AB\) and \(BA\).
+	\end{enumerate}
+
+\end{solution}
+
+\begin{problem}{14}
+	Consider a polynomial \( p \in \mathbb{C}[x] \) and a matrix \( A \in \mathbb{C}^{n \times n} \).
+	\begin{enumerate}
+		\item[(a)] For any \( \lambda \in \mathbb{C} \), show that \( \lambda \) is an eigenvalue of \( A \) if and only if \( p(\lambda) \) is an eigenvalue of \( p(A) \).
+		\textit{Optional Requirements:}
+		\begin{itemize}
+			\item Give a proof without using determinants or matrix decomposition.
+			\item Give a proof from a geometric point of view.
+			\item Give a proof from an algebraic point of view.
+		\end{itemize}
+		\item[(b)] Suppose that the eigenvalues of \( A \) are \( \lambda_1, \lambda_2, \ldots, \lambda_n \), multiple eigenvalues counted with multiplicity. Show that the eigenvalues of \( p(A) \) are \( p(\lambda_1), p(\lambda_2), \ldots, p(\lambda_n) \), multiple eigenvalues counted with multiplicity.
+	\end{enumerate}
+\end{problem}
+
+\begin{solution}
+	\begin{enumerate}
+	\item[(a)]
+	\textbf{Necessity}: If \(\lambda\) is an eigenvalue of \(A\), there exists \(v \neq 0\) such that \(Av = \lambda v\). 
+	
+	For \(p(x) = \sum_{k=0}^m a_k x^k\), compute:
+	$$
+	p(A)v = \left( \sum_{k=0}^m a_k A^k \right) v = \sum_{k=0}^m a_k \lambda^k v = p(\lambda) v.
+	$$
+	
+	Thus, \(p(\lambda)\) is an eigenvalue of \(p(A)\).
+	
+	\textbf{Sufficiency}: If \(p(\lambda)\) is an eigenvalue of \(p(A)\), there exists \(v \neq 0\) such that \(p(A)v = p(\lambda)v\). 
+	
+	Define \(q(x) = p(x) - p(\lambda)\), so \(q(\lambda) = 0\) and \(q(x) = (x - \lambda)r(x)\). 
+	
+	Then:
+	$$
+	q(A)v = (A - \lambda I)r(A)v = 0.
+	$$
+	
+	If \(r(A)v \neq 0\), then \(r(A)v\) is an eigenvector of \(A\) for \(\lambda\). 
+	
+	If \(r(A)v = 0\), recursively apply this argument to \(r(x)\) until a non-zero eigenvector is found.
+	
+	 Thus, \(\lambda\) is an eigenvalue of \(A\).
+	 
+	 \item[(b)]
+	 	\textbf{Method 1: Jordan Canonical Form}
+	
+	 Let \(A = PJP^{-1}\) where \(J = \text{diag}(J_1, J_2, \ldots, J_s)\) with \(J_i = \lambda_i I + N_i\) (\(N_i\) nilpotent). 
+	 
+	 Then:
+	 $$
+	 p(A) = P p(J) P^{-1}, \quad p(J) = \text{diag}(p(J_1), p(J_2), \ldots, p(J_s)).
+	 $$
+	 
+	 For each \(J_i\),
+	 $$
+	 p(J_i) = p(\lambda_i I + N_i) = \sum_{k=0}^m a_k (\lambda_i I + N_i)^k.
+	 $$
+	 
+	 Since \(N_i\) only affects off-diagonal entries, the eigenvalues of \(p(J_i)\) are \(p(\lambda_i)\) . 
+	 
+	 Thus, the eigenvalues of \(p(A)\) are \(p(\lambda_1), p(\lambda_2), \ldots, p(\lambda_n)\) with the same multiplicities as in \(A\).
+	 
+	 \textbf{Method 2: Characteristic Polynomial}
+	 
+	 The characteristic polynomial of \(A\) is \(\det(tI - A) = \prod_{i=1}^s (t - \lambda_i)^{m_i}\).
+	 
+	 Then the characteristic polynomial of \(p(A)\) is:
+	 $$
+	 \det(tI - p(A)) = \prod_{i=1}^s (t - p(\lambda_i))^{m_i}.
+	 $$
+	 
+	 Thus, the eigenvalues of \(p(A)\) are \(p(\lambda_1), p(\lambda_2), \ldots, p(\lambda_n)\) with algebraic multiplicities matching those of \(A\).
+	  \end{enumerate}
+\end{solution}
+
+\begin{problem}{15}
+	Let \( n > 1 \). Define \( A \in \mathbb{R}^{n \times n} \) to be the matrix with entries
+$$
+	A_{i,j} = 
+	\begin{cases} 
+		1 & \text{if } i = j, \\
+		x & \text{if } i \neq j, 
+	\end{cases}
+	\quad i,j = 1,2,\ldots,n.
+$$
+	
+	(a) Find the eigenvalues of \( A \). Specify their multiplicities.
+	
+	\vspace{1em}
+	
+	(b) Prove that \( A \) is positive definite if and only if \( -1/(n - 1) < x < 1 \).
+\end{problem}
+
+\begin{solution}
+    \begin{enumerate}
+	\item[(a)]
+	Decompose \( A \) as \( A = (1 - x)I + xJ \), where \( J \) is the all-ones matrix. 
+	
+	The eigenvalues of \( J \) are \( n \) (with multiplicity 1) and \( 0 \) (with multiplicity \( n-1 \)). 
+	
+	Thus, the eigenvalues of \( A \) are:
+	$$
+	\lambda_1 = 1 + (n-1)x \quad \text{(multiplicity 1)}, \quad \lambda_2 = 1 - x \quad \text{(multiplicity n-1)}.
+	$$
+	
+	Alternatively, \( \det(A - \lambda I) = 0 \) :
+	$$
+	\det\begin{pmatrix}
+		1-\lambda & x & \cdots & x \\
+		x & 1-\lambda & \cdots & x \\
+		\vdots & \vdots & \ddots & \vdots \\
+		x & x & \cdots & 1-\lambda
+	\end{pmatrix} = (1 - \lambda - x)^{n-1} [1 - \lambda + (n-1)x] = 0.
+$$
+	
+	\item[(b)]
+	Matrix \( A \) is positive definite if and only if all its eigenvalues are positive:
+	 $$ 1 + (n-1)x > 0 \implies x > -1/(n-1) ,$$
+	$$ 1 - x > 0 \implies x < 1 .$$
+	
+	Combining these conditions:
+	$$
+	-1/(n-1) < x < 1.
+	$$
+	 \end{enumerate}
+\end{solution}
+
+\begin{problem}{16}
+	Suppose that \( m \geq n \). Define \( \mathcal{S} = \{ X \in \mathbb{C}^{m \times n} : X^H X = I_n \} \). Given \( X \in \mathbb{C}^{m \times n} \), let \( \text{dist}(X, \mathcal{S}) \) be the distance from \( X \) to \( \mathcal{S} \) in Frobenius norm.
+	\begin{enumerate}
+		\item[(a)] Prove that \( \text{dist}(X, \mathcal{S}) \leq \| I_n - X^H X \|_F \)
+		\item[(b)] Prove that there does not exist a constant \( C \) such that \( \| I_n - X^H X \|_F \leq C \, \text{dist}(X, \mathcal{S}) \) for all \( X \in \mathbb{C}^{m \times n} \).
+	\end{enumerate}
+\end{problem}
+
+\begin{solution}
+\begin{enumerate}
+	\item[(a)]
+	Let \( X = U \Sigma V^H \) be the SVD of \( X \), where \( \Sigma = \text{diag}(\sigma_1, \ldots, \sigma_n) \). 
+	
+	Define \( Y = U V^H \), then \( Y^H Y = I_n \), so \( Y \in \mathcal{S} \):
+	$$
+	\|X - Y\|_F^2 = \|\Sigma - I_n\|_F^2 = \sum_{i=1}^n (\sigma_i - 1)^2.
+	$$
+	
+	On the other hand,
+	$$
+	\|I_n - X^H X\|_F^2 = \|I_n - \Sigma^2\|_F^2 = \sum_{i=1}^n (1 - \sigma_i^2)^2.
+	$$
+	
+	Since \( (1 - \sigma_i^2)^2 \geq (1 - \sigma_i)^2 \), it follows that:
+	$$
+	\|I_n - X^H X\|_F \geq \|X - Y\|_F \geq \text{dist}(X, \mathcal{S}).
+	$$
+	
+\item[(b)]
+	Consider the sequence \( X_k = \sqrt{k} \cdot I_n \), then \( X_k^H X_k = k I_n \), so:
+	$$
+	\|I_n - X_k^H X_k\|_F = \sqrt{n} \cdot (k - 1) \to \infty \quad \text{as} \quad k \to \infty.
+	$$
+	
+	For any \( Y \in \mathcal{S} \),
+	$$
+	\|X_k - Y\|_F^2 = k n + n - 2\sqrt{k} \cdot \text{Re}(\text{tr}(Y^H)) \geq n (\sqrt{k} - 1)^2.
+	$$
+	
+	Thus, \( \text{dist}(X_k, \mathcal{S}) \approx \sqrt{n} \cdot (\sqrt{k} - 1) \to \infty \), but:
+	$$
+	\frac{\|I_n - X_k^H X_k\|_F}{\text{dist}(X_k, \mathcal{S})} \approx \frac{\sqrt{n} \cdot (k - 1)}{\sqrt{n} \cdot (\sqrt{k} - 1)} \to \infty \quad \text{as} \quad k \to \infty.
+	$$
+	
+	Therefore, no constant \( C \) exists such that \( \|I_n - X^H X\|_F \leq C \, \text{dist}(X, \mathcal{S}) \) for all \( X \).
+		\end{enumerate}
+\end{solution}
+
+\begin{problem}{17}
+	Let \( A \in \mathbb{C}^{m \times n} \) be a nonsingular matrix, and
+	$$
+	J = \begin{pmatrix} 0 & A \\ A^H & 0 \end{pmatrix}.
+	$$
+	\begin{enumerate}
+		\item[(a)] If the eigenvalues of \( A^H A \) are \( \sigma_1, \ldots, \sigma_n \), multiplicity included, prove that the eigenvalues of \( J \) are \( \sqrt{\sigma_1}, -\sqrt{\sigma_1}, \ldots, \sqrt{\sigma_n}, -\sqrt{\sigma_n} \), multiplicity included.
+		\item[(b)] Consider \( n \times n \) complex matrices \( U_1, U_2, V_1, V_2 \), and \( \Sigma \). Suppose that \( \Sigma \) is a diagonal matrix whose diagonal entries are all positive. If
+		$$
+		J = \begin{pmatrix} U_1 & U_2 \\ V_1 & V_2 \end{pmatrix} \begin{pmatrix} \Sigma & 0 \\ 0 & -\Sigma \end{pmatrix} \begin{pmatrix} U_1 & U_2 \\ V_1 & V_2 \end{pmatrix}^H
+		$$
+		is an eigenvalue decomposition of \( J \), prove that
+		$$
+		A = 2 U_1 \Sigma V_1^H = -2 U_2 \Sigma V_2^H.
+		$$
+	\end{enumerate}
+\end{problem}
+
+\begin{solution}
+		\begin{enumerate}
+		\item[(a)] 
+	Let \(\lambda\) be an eigenvalue of \(J\) with eigenvector \(\begin{pmatrix} x \\ y \end{pmatrix}\). Then,we get
+	$$
+	\begin{pmatrix} 0 & A \\ A^H & 0 \end{pmatrix} \begin{pmatrix} x \\ y \end{pmatrix} = \lambda \begin{pmatrix} x \\ y \end{pmatrix} \implies 
+	\begin{cases} 
+		Ay = \lambda x, \\ 
+		A^H x = \lambda y. 
+	\end{cases}
+	$$
+	
+	Eliminating \(x\) or \(y\) gives \(A^H A y = \lambda^2 y\) or \(A A^H x = \lambda^2 x\). 
+	
+	Thus, \(\lambda^2\) is an eigenvalue of \(A^H A\), so \(\lambda = \pm \sqrt{\sigma_i}\), where \(\sigma_i\) are the eigenvalues of \(A^H A\). 
+	
+	Since \(A^H A\) and \(A A^H\) share the same non-zero eigenvalues, the eigenvalues of \(J\) are \(\pm \sqrt{\sigma_1}, \ldots, \pm \sqrt{\sigma_n}\).
+	
+		\item[(b)] 
+	Given the eigenvalue decomposition:
+	$$
+	J = \begin{pmatrix} U_1 & U_2 \\ V_1 & V_2 \end{pmatrix} \begin{pmatrix} \Sigma & 0 \\ 0 & -\Sigma \end{pmatrix} \begin{pmatrix} U_1 & U_2 \\ V_1 & V_2 \end{pmatrix}^H.
+	$$
+	
+	Compute the block elements of the product:
+	$$
+	\begin{pmatrix} 0 & A \\ A^H & 0 \end{pmatrix} = \begin{pmatrix} 
+		U_1 \Sigma U_1^H - U_2 \Sigma U_2^H & U_1 \Sigma V_1^H - U_2 \Sigma V_2^H \\
+		V_1 \Sigma U_1^H - V_2 \Sigma U_2^H & V_1 \Sigma V_1^H - V_2 \Sigma V_2^H 
+	\end{pmatrix}.
+	$$
+	
+	From the off-diagonal blocks:
+$$
+	U_1 \Sigma V_1^H - U_2 \Sigma V_2^H = A, \quad V_1 \Sigma U_1^H - V_2 \Sigma U_2^H = A^H,
+$$
+$$
+    U_1 \Sigma U_1^H - U_2\Sigma U_2^H = 0,  V_1\Sigma V_1^H - V_2\Sigma V_2^H = 0.
+$$
+
+\(J\) is a conjugate - symmetric matrix:
+$$
+J^H=\begin{pmatrix}0&A\\A^H&0\end{pmatrix}^H=\begin{pmatrix}0&A^H\\A&0\end{pmatrix}^H=\begin{pmatrix}0&A\\A^H&0\end{pmatrix}=J.
+
+Therefore, the matrix \(\begin{pmatrix}U_1&U_2\\V_1&V_2\end{pmatrix}\) in the eigenvalue decomposition usually satisfies unitarity, that is:
+$$
+\begin{pmatrix}U_1&U_2\\V_1&V_2\end{pmatrix}^H\begin{pmatrix}U_1&U_2\\V_1&V_2\end{pmatrix}=I.
+$$
+
+After expansion, the block-orthogonality relations can be obtained that
+$$
+\begin{cases}U_1^HU_1 + V_1^HV_1 = I\\U_1^HU_2 + V_1^HV_2 = 0\\U_2^HU_1 + V_2^HV_1 = 0\\U_2^HU_2 + V_2^HV_2 = I\end{cases}
+$$
+
+Assume \(A = 2U_1\Sigma V_1^H\), then substitute it into the top-right block equation, we get
+$$
+U_1\Sigma V_1^H - U_2\Sigma V_2^H = 2U_1\Sigma V_1^H\implies - U_2\Sigma V_2^H = U_1\Sigma V_1^H.
+$$
+
+Meanwhile, observing the bottom - right block \(V_1\Sigma V_1^H = V_2\Sigma V_2^H\) and combining with the unitarity \(U_2^HU_2 + V_2^HV_2 = I\), we can verify
+$$
+A^H=(2U_1\Sigma V_1^H)^H = 2V_1\Sigma U_1^H
+$$
+
+And the bottom-left block equation is \(V_1\Sigma U_1^H - V_2\Sigma U_2^H = A^H\). If \(A = - 2U_2\Sigma V_2^H\), then \(A^H=-2V_2\Sigma U_2^H\), substitute it into the bottom-left block equation, we get
+$$
+V_1\Sigma U_1^H - V_2\Sigma U_2^H=-2V_2\Sigma U_2^H\implies V_1\Sigma U_1^H=-V_2\Sigma U_2^H.
+$$
+
+Combining with \(-U_2\Sigma V_2^H = U_1\Sigma V_1^H\) , taking the conjugate transpose of both sides gives that \(-V_2\Sigma U_2^H = V_1\Sigma U_1^H\).
+
+This is completely consistent with \(V_1\Sigma U_1^H=-V_2\Sigma U_2^H\) derived from the bottom-left block. Therefore, the assumption holds.
+
+	\end{enumerate}
+\end{solution}
+
+\begin{problem}{18}
+	\begin{enumerate}
+		\item[(a)] If \( 2 \leq m \leq n + 1 \), show that there exists \( \{ v_1, v_2, \ldots, v_m \} \subset \mathbb{R}^n \) such that \( v_i^T v_j < 0 \) for all distinct indices \( i, j \in \{ 1, 2, \ldots, m \} \).
+		\item[(b)] If \( m > n + 1 \), show that there does not exist \( \{ v_1, v_2, \ldots, v_m \} \subset \mathbb{R}^n \) such that \( v_i^T v_j < 0 \) for all distinct indices \( i, j \in \{ 1, 2, \ldots, m \} \).
+	\end{enumerate}
+\end{problem}
+
+\begin{solution}
+	\begin{enumerate}
+	\item[(a)] 
+	Take any \( v_1 = (1, 0, \dots, 0)^T \in \mathbb{R}^n \) and \( v_2 = (-1, 0, \dots, 0)^T \). Then \( v_1^T v_2 = -1 < 0 \), which obviously satisfies the condition. 
+	
+	Extension to \( m \leq n + 1 \) , we use the construction of hyperplanes passing through the origin in \( \mathbb{R}^n \). Suppose \( k \) vectors \( v_1, \dots, v_k \) (\( k < n + 1 \)) have been constructed such that the inner product of any two of them is negative. Now, construct the \( (k + 1) \)-th vector \( v_{k + 1} \).  
+	
+	Consider the subspace \( \text{span}\{v_1, \dots, v_k\} \) spanned by \( v_1, \dots, v_k \). Its dimension is \( \leq k \leq n \). Therefore, there exists a hyperplane \( H \) (a subspace of dimension \( n - 1 \)) that separates from this subspace, and \( H \) passes through the origin. Take \( v_{k + 1} \) as a vector on one side of \( H \) (the side not containing the subspace) such that the inner products of \( v_{k + 1} \) with \( v_1, \dots, v_k \) are all negative.  
+	
+	\item[(b)] 
+	Assume there exist \( m > n + 1 \) vectors \( v_1, v_2, \ldots, v_m \) with \( v_i^T v_j < 0 \) for all \( i \neq j \). 
+	
+	Consider the vectors \( v_1, v_2, \ldots, v_{n+1} \), since they are in \(\mathbb{R}^n\), they are linearly dependent, there exist coefficients \( c_1, c_2, \ldots, c_{n+1} \), not all zero, such that:
+	$$
+	\sum_{i=1}^{n+1} c_i v_i = 0.
+	$$
+	
+	Taking the inner product with \( v_j \) for any \( j \):
+	$$
+	\sum_{i=1}^{n+1} c_i (v_i^T v_j) = 0.
+	$$
+	
+	Since \( v_i^T v_j < 0 \), this leads to a contradiction. 
+	
+	Thus, such vectors do not exist for \( m > n + 1 \).
+		\end{enumerate}
+\end{solution}
+
+\begin{problem}{19}
+	Given \( A \in \mathbb{R}^{m \times m} \) and \( B \in \mathbb{R}^{n \times n} \), prove that the equation
+	$$
+	AX - XB = C, \quad X \in \mathbb{R}^{m \times n}
+	$$
+	has a unique solution for all \( C \in \mathbb{R}^{m \times n} \) if and only if \( A \) and \( B \) do not share any eigenvalue.
+	
+	[When \( n = 1 \), \( B \) is a scalar while \( X \) and \( C \) are \( m \)-dimensional vectors; in this case, the conclusion says nothing but \( (A - BI)X = C \) has a unique solution for all \( C \in \mathbb{R}^m \) if and only if \( B \) is not an eigenvalue of \( A \).]
+\end{problem}
+
+\begin{solution}
+	\textbf{Necessity}: 
+	
+	Suppose \(\lambda \in \sigma(A) \cap \sigma(B)\), then there exist non-zero vectors \(x\) and \(y\) such that:
+	$$
+	Ax = \lambda x \quad \text{and} \quad B^T y = \lambda y \implies By = \lambda y.
+	$$
+	
+	Define \(X = x y^T\), then we get
+	$$
+	AX - XB = A(xy^T) - (xy^T)B = (Ax)y^T - x(By)^T = \lambda xy^T - \lambda xy^T = 0.
+	$$
+	
+	Thus, the equation \(AX - XB = 0\) has a non-zero solution \(X\), contradicting the uniqueness of solutions for \(C = 0\).
+	
+	\textbf{Sufficiency}: 
+	
+	Define the linear operator \(\mathcal{L}(X) = AX - XB\), \(\mathcal{L}\) is bijective.
+	
+	Injectivity: If \(\mathcal{L}(X) = 0\), then \(AX = XB\). For any eigenvalue \(\lambda\) of \(B\) with eigenvector \(y\), we have
+	$$
+	A(Xy) = X(By) = \lambda (Xy).
+	$$
+	
+	If \(Xy \neq 0\), then \(\lambda\) is also an eigenvalue of \(A\), contradicting the assumption. 
+	
+	Thus, \(Xy = 0\) for all eigenvectors \(y\), implying \(X = 0\).
+	
+	Surjectivity: As \(\mathcal{L}\) is a linear operator on a finite-dimensional space, injectivity implies surjectivity. 
+	
+	Hence, for any \(C\), there exists a unique \(X\) such that \(\mathcal{L}(X) = C\).
+\end{solution}
+
+\begin{problem}{20}
+	Let \( X \) be a random variable and \( f \) be a convex function on \( \mathbb{R} \). Suppose that both \( X \) and \( f(X) \) have finite expectations. Prove Jensen's inequality:
+	$$
+	f(\mathbb{E}(X)) \leq \mathbb{E}[f(X)]
+	$$
+\end{problem}
+
+\begin{solution}
+	
+	Let \( c = E(X) \), then \( X = c + Y \), where \( E(Y) = 0 \).
+	
+	Since \( f \) is a convex function,
+	
+	So \( \forall x,\forall c,\exists \xi\in(x,c) \) 
+	$$
+	f(x)=f(c)+f^\prime(c)(x - c)+\frac{1}{2}f^{\prime\prime}(\xi)(x - c)^2+o(\|x - c\|^2)
+	$$
+	
+	And \( f^{\prime\prime}(\xi)\geq0 \)
+	
+	Thus, 
+	$$
+	f(x)\geq f(c)+f^\prime(c)\cdot(x - c)
+	$$
+	
+	Substitute \( c = E(X) \) and \( x = X \), then
+	$$
+	f(X)\geq f(E(X))+f^\prime(E(X))\cdot(X - E(X))
+	$$
+	
+	Take the expectation
+	$$
+	E(f(X))\geq E(f(E(X)))+ E\left[f^\prime(E(X))\cdot(X - E(X))\right]
+	$$
+	
+	\( f(E(X)) \) is a constant, so \( E[f(E(X))]=f(E(X)) \)
+	
+	Thus, 
+	$$E(f(X))\geq f(E(X))$$
+\end{solution}
+
+\begin{problem}{21}
+For any convex function \( f \) on \([0, 1]\), prove that
+$$
+f\left( \frac{1}{2} \right) \leq \int_{0}^{1} f(x) \, dx \leq \frac{1}{2} \left[ f(0) + f(1) \right].
+$$
+\end{problem}
+\begin{solution}
+
+Given \( f(\lambda x_1 + (1 - \lambda) x_2) \leq \lambda f(x_1) + (1 - \lambda) f(x_2), \lambda \in (0,1) \)  
+	
+Take \( x_1 = t + \frac{1}{2} \)，\( x_2 = -t + \frac{1}{2} \)，\( t \in \left[0, \frac{1}{2}\right] \)  
+	
+Let \( \lambda = \frac{1}{2} \)，then：  
+$$
+	f\left( \frac{1}{2}(x_1 + x_2) \right) \leq \frac{1}{2} f(x_1) + \frac{1}{2} f(x_2)
+$$ 
+
+Substitute \( x_1, x_2 \)：  
+$$
+	f\left( \frac{1}{2} \right) \leq \frac{1}{2} f\left( t + \frac{1}{2} \right) + \frac{1}{2} f\left( -t + \frac{1}{2} \right)
+$$  
+	
+Integrate both sides：  
+$$
+	\int_{0}^{\frac{1}{2}} f\left( \frac{1}{2} \right) dt = f\left( \frac{1}{2} \right) \cdot \left( \frac{1}{2} - 0 \right) = \frac{1}{2} f\left( \frac{1}{2} \right)
+$$ 
+$$
+	\int_{0}^{\frac{1}{2}} \left[ \frac{1}{2} f\left( t + \frac{1}{2} \right) + \frac{1}{2} f\left( -t + \frac{1}{2} \right) \right] dt= \frac{1}{2} \int_{\frac{1}{2}}^{1} f(x) dx + \frac{1}{2} \int_{0}^{\frac{1}{2}} f(x) dx \quad = \frac{1}{2} \int_{0}^{1} f(x) dx
+$$
+
+	Thus：  
+$$
+	\frac{1}{2} f\left( \frac{1}{2} \right) \leq \frac{1}{2} \int_{0}^{1} f(x) dx
+$$ 
+$$
+	f\left( \frac{1}{2} \right) \leq \int_{0}^{1} f(x) \, dx
+$$ 
+	
+Take \( (0, f(0)) \)，\( (1, f(1)) \)，then
+$$
+	f(x) \leq \lambda f(1) + (1 - \lambda) f(0), \quad \lambda \in (0,1), \, x \in [0,1]
+$$ 
+
+Integrate both sides：  
+$$
+	\int_{0}^{1} f(x) dx \leq \int_{0}^{1} \left[ \lambda f(1) + (1 - \lambda) f(0) \right] d\lambda
+$$ 
+$$
+	\int_{0}^{1} \left[ \lambda f(1) + (1 - \lambda) f(0) \right] d\lambda 
+	= f(1) \int_{0}^{1} \lambda d\lambda + f(0) \int_{0}^{1} (1 - \lambda) d\lambda= f(1) \cdot \frac{1}{2} + f(0) \cdot \frac{1}{2} 
+	= \frac{1}{2} \left[ f(0) + f(1) \right]
+$$
+
+Thus：  
+$$
+	\int_{0}^{1} f(x) \, dx \leq \frac{1}{2} \left[ f(0) + f(1) \right]
+$$
+	
+\end{solution}     
+
+
+\begin{problem}{22}
+	Let \( X \) be a random variable. Suppose that \( f \) and \( g \) are two increasing functions such that the \( f(X) \) and \( g(X) \) are both bounded. Prove
+$$
+	\mathbb{E}[f(X)g(X)] \geq \mathbb{E}[f(X)]\mathbb{E}[g(X)]
+$$
+\end{problem}
+
+\begin{solution}
+
+	Let  \( X_1 \) and \( X_2 \) are identically distributed and mutually independent,so:  
+ $$ (f(X_1) - f(X_2))(g(X_1) - g(X_2)) \geq 0 $$
+$$\mathbb{E}\left[(f(X_1) - f(X_2))(g(X_1) - g(X_2))\right] \geq 0 
+$$ 
+
+	Expand the product: $$ \mathbb{E}\left[ f(X_1)g(X_1) + f(X_2)g(X_2) - f(X_1)g(X_2) - f(X_2)g(X_1) \right] \geq 0 $$  
+ $$ \mathbb{E}\left[ f(X_1)g(X_1) \right] + \mathbb{E}\left[ f(X_2)g(X_2) \right] - \mathbb{E}\left[ f(X_1)g(X_2) \right] - \mathbb{E}\left[ f(X_2)g(X_1) \right] \geq 0 $$
+	
+	Since \( X_1 \) and \( X_2 \) are identically distributed: $$ \mathbb{E}\left[ f(X_1)g(X_1) \right] = \mathbb{E}\left[ f(X_2)g(X_2) \right] = \mathbb{E}\left[ f(X)g(X) \right] $$  
+	
+	And by independence: $$ \mathbb{E}\left[ f(X_1)g(X_2) \right] = \mathbb{E}\left[ f(X_1) \right]\mathbb{E}\left[ g(X_2) \right] = \mathbb{E}\left[ f(X) \right]\mathbb{E}\left[ g(X) \right] $$  
+	
+	Similarly, $$ \mathbb{E}\left[ f(X_2)g(X_1) \right] = \mathbb{E}\left[ f(X) \right]\mathbb{E}\left[ g(X) \right] $$.  
+	
+	Substituting: $$ 2\mathbb{E}[f(X)g(X)] - 2\mathbb{E}[f(X)]\mathbb{E}[g(X)] \geq 0 $$  
+	
+Then: $$ \mathbb{E}[f(X)g(X)] \geq \mathbb{E}[f(X)]\mathbb{E}[g(X)] $$ 
+\end{solution}
+
+\begin{problem}{23}
+Suppose that $\{a_k\}$ and $\{b_k\}$ are monotone real sequences with the same monotonicity. Let $n$ be a nonnegative integer. Prove that
+$$
+\sum_{k = 0}^n a_k b_{n - k} \leq \frac{1}{n + 1} \left( \sum_{k = 0}^n a_k \right) \left( \sum_{k = 0}^n b_k \right) \leq \sum_{k = 0}^n a_k b_k
+$$
+Give as many proofs as possible.
+\end{problem}
+
+
+\begin{solution}
+
+\textbf{Method 1.} 
+Let \(\{a_k\}\) and \(\{b_k\}\) be two monotonic real sequences with the same monotonicity: \(a_0\leq a_1\leq\cdots\leq a_n\) and \(b_0\leq b_1\leq\cdots\leq b_n\).  
+
+Left - hand Inequality: \(\sum_{k = 0}^{n}a_k b_{n - k}\leq\frac{1}{n + 1}\left(\sum_{k = 0}^{n}a_k\right)\left(\sum_{k = 0}^{n}b_k\right)\) 
+ 
+First, expand \(\left(\sum_{k = 0}^{n}a_k\right)\left(\sum_{k = 0}^{n}b_k\right)\):  
+$$
+\left(\sum_{k = 0}^{n}a_k\right)\left(\sum_{k = 0}^{n}b_k\right)=\sum_{k = 0}^{n}\sum_{j = 0}^{n}a_k b_j
+$$ 
+
+I use the rearrangement inequality:  
+$$
+\sum_{k = 0}^{n}a_k b_{n - k}\leq\sum_{k = 0}^{n}a_k b_{j_(k)}
+$$
+
+It has (n + 1) permutations,so 
+$$
+(n + 1)\sum_{k = 0}^{n}a_k b_{n - k}\leq\sum_{k = 0}^{n}\sum_{j = 0}^{n}a_k b_j
+$$  
+
+Thus:  
+$$
+\sum_{k = 0}^{n}a_k b_{n - k}\leq\frac{1}{n + 1}\left(\sum_{k = 0}^{n}a_k\right)\left(\sum_{k = 0}^{n}b_k\right)
+$$  
+
+Right - hand Inequality: \(\frac{1}{n + 1}\left(\sum_{k = 0}^{n}a_k\right)\left(\sum_{k = 0}^{n}b_k\right)\leq\sum_{k = 0}^{n}a_k b_k\)  
+
+Similarly, use the rearrangement inequality:   
+$$
+\sum_{k = 0}^{n}a_k b_{j(k)}\leq\sum_{k = 0}^{n}a_k b_k
+$$  
+
+It has (n + 1) permutations,so 
+$$
+\frac{1}{n + 1}\sum_{k = 0}^{n}\sum_{j = 0}^{n}a_k b_j\leq\sum_{k = 0}^{n}a_k b_k
+$$
+
+And \(\sum_{k = 0}^{n}\sum_{j = 0}^{n}a_k b_j=\left(\sum_{k = 0}^{n}a_k\right)\left(\sum_{k = 0}^{n}b_k\right)\), so:  
+$$
+\frac{1}{n + 1}\left(\sum_{k = 0}^{n}a_k\right)\left(\sum_{k = 0}^{n}b_k\right)\leq\sum_{k = 0}^{n}a_k b_k
+$$  
+ 
+Concluding:  
+$$
+\sum_{k = 0}^{n}a_k b_{n - k}\leq\frac{1}{n + 1}\left(\sum_{k = 0}^{n}a_k\right)\left(\sum_{k = 0}^{n}b_k\right)\leq\sum_{k = 0}^{n}a_k b_k
+$$  
+
+\end{solution} 
+
+%\noindent\rule{7in}{2.8pt} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Problem 2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{problem}{24}
+	Prove that a sequence $\{x_k\} \subset \mathbb{R}$ converges if $\sum_{\substack{|x_k| > \epsilon}} |x_k - x_{k + 1}| < \infty$ for all $\epsilon > 0$. Is the converse proposition true?
+\end{problem}
+
+\begin{solution}
+
+For \(\sum_{i = 1}^{\infty} \frac{(-1)^i}{i}\), \(a_i = \frac{1}{i}\) satisfies \(\frac{1}{i} \geq \frac{1}{i + 1}\) and \(\lim_{i \to \infty} \frac{1}{i} = 0\). 
+
+Therefore, the alternating harmonic series \(\sum_{i = 1}^{\infty} \frac{(-1)^i}{i}\) converges, and its partial sum sequence \(\{x_k\}\) also converges. 
+	
+So:
+$$
+|x_k - x_{k + 1}| = \left| \sum_{i = 1}^k \frac{(-1)^i}{i} - \sum_{i = 1}^{k + 1} \frac{(-1)^i}{i} \right| = \left| -\frac{(-1)^{k + 1}}{k + 1} \right| = \frac{1}{k + 1}
+$$
+
+For \(|x_k| > \epsilon\),
+$$
+|x_1| = | - 1| = 1
+$$
+$$
+|x_2| = | - 1 + \frac{1}{2}| =\frac{1}{2}
+$$
+$$
+|x_3| = | - 1 + \frac{1}{2} -\frac{1}{3}| = \frac{5}{6}
+$$
+$$
+\cdots\cdots
+$$
+
+Take \(\epsilon = 0.01\),there are infinitely many \(k\) such that \(|x_k| > \epsilon\).
+
+Therefore, \(\sum_{|x_k| > \epsilon} |x_k - x_{k + 1}| = \sum_{|x_k| > \epsilon} \frac{1}{k + 1} = \infty\),The converse proposition is false.
+\end{solution}
+\begin{problem}{25}
+Let $\{a_k\}$ and $\{b_k\}$ be nonnegative real sequences. For each index $k \geq 0$, one of the following two conditions holds:
+\begin{itemize}
+	\item[(a)] $a_k \leq b_k$ and $a_{k + 1} = 2a_k$;
+	\item[(b)] $a_{k + 1} = a_k / 2$.
+\end{itemize}
+Prove that
+$$
+\sum_{k = 0}^{\infty} a_k \leq 2a_0 + 4\sum_{k = 0}^{\infty} b_k
+$$
+\end{problem}
+
+\begin{solution}
+
+Let \( a_0 = c \) , I assume that the growth condition (a) is satisfied when \( k = 0, 1 \), and the decay starts when \( k = 2 \), that is:
+\begin{itemize}
+	\item \( k = 0 \): \( a_0 \leq b_0 \), so \( a_1 = 2a_0 = 2c \);
+	\item \( k = 1 \): \( a_1 \leq b_1 \), so \( a_2 = 2a_1 = 4c \); 
+	\item \( k = 2 \): The condition (a) is not satisfied, so \( a_3=\frac{a_2}{2} = 2c \), \( a_4=\frac{a_3}{2}=c \), \( a_5 = \frac{c}{2} \), and the decay continues in this way. 
+\end{itemize}
+$$
+\begin{aligned}
+	\sum_{k = 0}^{\infty} a_k &= c + 2c + 4c + 2c + c + \frac{c}{2} + \frac{c}{4} + \dots \\
+	&= (c + 2c + 4c) + \left(2c + c + \frac{c}{2} + \dots\right) \\
+	&= 7c + 4c 
+\end{aligned}
+$$
+
+And, \( b_0 \geq c \), \( b_1 \geq 2c \). So \( 2a_0 + 4\sum b_k \geq 2c + 4(b_0 + b_1 + \dots) \geq 2c + 4(c + 2c) = 14c \). 
+
+Obviously, \( 11c \leq 14c \), and the inequality holds.
+
+\end{solution} 
+
+\begin{problem}{26}
+	Suppose that \( X \subset \mathbb{R}^n \) is a compact set, and \( T : X \to X \) is a continuous operator satisfying
+	$$
+	\| T(x) - T(y) \| < \| x - y \| \quad \text{for all distinct } x, y \in X.
+	$$
+	
+	(a) Show that \( T \) has a unique fixed point.
+	
+	(b) For any \( x_0 \in X \), show that the fixed point iteration
+	$$
+	x_{k + 1} = T(x_k)
+	$$
+	converges to the fixed point.
+\end{problem}
+
+\begin{solution}
+	(a)
+	
+	Define \( f(x) = \| x - T(x) \| \), since \( T \) is continuous, \( f \) is continuous. 
+	
+	As \( X \) is compact, \( f \) attains its minimum \( m = f(x^*) \) at some \( x^* \in X \).
+	
+	Suppose \( m > 0 \),  \( x^* \neq T(x^*) \), then:
+	$$
+	f(T(x^*)) = \| T(x^*) - T(T(x^*)) \| < \| x^* - T(x^*) \| = m,
+	$$
+	contradicting the minimality of \( m \). 
+	
+	Thus, \( m = 0 \), so \( x^* = T(x^*) \).
+	
+	For uniqueness, if \( x^* \) and \( y^* \) are fixed points, then:
+	$$
+	\| x^* - y^* \| = \| T(x^*) - T(y^*) \| < \| x^* - y^* \|. 
+	$$
+
+	Contradicted, hence, the fixed point is unique.
+	
+	(b)
+	Let \( x^* \) be the unique fixed point. 
+	
+	Consider the sequence \( \{ x_k \} \) with \( x_{k+1} = T(x_k) \),and:
+	$$
+	\| x_{k+1} - x^* \| = \| T(x_k) - T(x^*) \| < \| x_k - x^* \|.
+	$$
+	
+	The sequence \( \{ \| x_k - x^* \| \} \) is decreasing and bounded below by 0, hence converges to \( d \geq 0 \).
+	
+	Since \( X \) is compact, there exists a subsequence \( \{ x_{k_j} \} \) converging to \( y \in X \). 
+	
+	By continuity of \( T \):
+	$$
+	\lim_{j \to \infty} x_{k_j+1} = \lim_{j \to \infty} T(x_{k_j}) = T(y).
+	$$
+	
+	But the entire sequence \( \{ x_k \} \) converges to \( y \), so \( y = T(y) \), implying \( y = x^* \). 
+	
+	Thus, \( d = 0 \), and the sequence converges to \( x^* \).
+
+\end{solution}
+
+\begin{problem}{27}
+Let \( f : [0, 1] \to [0, 1] \) be a continuous function. Consider the fixed point iteration \( x_{k+1} = f(x_k) \) with a certain \( x_0 \in [0, 1] \). If \( x_k - x_{k+1} \to 0 \), is it guaranteed that \( \{x_k\} \) converges?
+
+\end{problem}
+
+\begin{solution}
+	
+A bounded sequence does not necessarily converge; it needs to satisfy the Cauchy convergence criterion (for any \(\epsilon > 0\), there exists \(N\) such that when \(m, n > N\), \(|x_m - x_n| < \epsilon\)). Merely having \(x_k - x_{k + 1} \to 0\) cannot directly imply that the sequence is a Cauchy sequence. This is because there may be "cumulative" deviations that cannot be offset. Although the distance between adjacent terms approaches 0, the distance between terms separated by multiple steps may not approach 0. 
+
+For example,define \( f(x) \) to be continuous on \([0, 1]\). Let \( x_1 = 0 \), \( f(0)=\frac{1}{2} \), \( f\left(\frac{1}{2}\right)=\frac{3}{4} \), \( f\left(\frac{3}{4}\right)=\frac{5}{8} \), \( f\left(\frac{5}{8}\right)=\frac{11}{16}, \cdots \). 
+$$
+x_{k + 1} = f(x_k) = 
+\begin{cases} 
+	x_k + \frac{1}{2^k}, & \text{if } k \text{ is odd (e.g., } k = 1, 3, 5, \ldots\text{)} \\
+	x_k - \frac{1}{2^k}, & \text{if } k \text{ is even (e.g., } k = 2, 4, 6, \ldots\text{)} 
+\end{cases}
+$$
+At this time, \( |x_k - x_{k + 1}| = \frac{1}{2^k} \to 0 \), but the odd - term subsequence and the even - term subsequence of \( \{x_k\} \) tend to different limits , which does not satisfy the Cauchy criterion, so \( \{x_k\} \) does not converge.
+\end{solution}
+
+\begin{problem}{28}
+Suppose that \( f \) is a twice differentiable function on \([0,1]\) satisfying 
+$$
+f'(0) = 0 = f'(1)
+$$
+Show that there exists a number \( \xi \in (0,1) \) such that 
+$$
+|f''(\xi)| = 4|f(0) - f(1)|.
+$$
+\end{problem}
+
+\begin{solution}
+
+	Applying Taylor's theorem with Lagrange remainder at \( x = 0 \) and \( x = 1 \) respectively:
+	
+	First, expand \( f(x) \) around \( x = 0 \):
+$$
+	f(x) = f(0) + f'(0)x + \frac{f''(\xi_1)}{2}x^2 = f(0) + \frac{f''(\xi_1)}{2}x^2
+$$
+
+	for some \( \xi_1 \in (0, x) \). Setting \( x = \frac{1}{2} \), we get
+$$
+	f\left(\frac{1}{2}\right) = f(0) + \frac{f''(\xi_1)}{8}
+$$
+
+	where \( \xi_1 \in \left(0, \frac{1}{2}\right) \).
+	
+	Next, expand \( f(x) \) around \( x = 1 \):
+$$
+	f(x) = f(1) + f'(1)(x - 1) + \frac{f''(\xi_2)}{2}(x - 1)^2 = f(1) + \frac{f''(\xi_2)}{2}(x - 1)^2
+$$
+	
+	for some \( \xi_2 \in (x, 1) \). Setting \( x = \frac{1}{2} \), we get
+$$
+	f\left(\frac{1}{2}\right) = f(1) + \frac{f''(\xi_2)}{8}
+$$
+
+	where \( \xi_2 \in \left(\frac{1}{2}, 1\right) \).
+	
+	Equating the two expressions for \( f\left(\frac{1}{2}\right) \):
+$$
+	f(0) + \frac{f''(\xi_1)}{8} = f(1) + \frac{f''(\xi_2)}{8}
+$$
+
+	Rearranging terms, we obtain
+$$
+	f(0) - f(1) = \frac{f''(\xi_2) - f''(\xi_1)}{8}
+$$
+$$
+	8|f(0) - f(1)| = |f''(\xi_2) - f''(\xi_1)|
+$$
+	
+	By the triangle inequality,
+$$
+	|f''(\xi_2) - f''(\xi_1)| \leq |f''(\xi_2)| + |f''(\xi_1)|
+$$
+	
+	Let \( M = \max\{|f''(\xi_1)|, |f''(\xi_2)|\} \). Then
+$$
+	|f''(\xi_2)| + |f''(\xi_1)| \leq 2M
+$$
+
+	Combining these results, we have
+$$
+	8|f(0) - f(1)| \leq 2M \implies M \geq 4|f(0) - f(1)|
+$$
+	
+This shows that the maximum absolute value of \( f''(x) \) on \( [\xi_1, \xi_2] \subset (0, 1) \) is at least \( 4|f(0) - f(1)| \). Moreover, since \( f''(x) \) is continuous,there exists \( \xi \in [\xi_1, \xi_2] \subset (0, 1) \) such that: \( |f''(\xi)| = M \geq 4|f(0) - f(1)| \)
+	
+	Thus, there exists \( \xi \in (0,1) \) such that
+$$
+	|f''(\xi)| = 4|f(0) - f(1)|
+$$
+\end{solution}
+\begin{problem}{29}
+	Let \( f : \mathbb{R} \to \mathbb{R} \) be a continuous function.
+	\begin{enumerate}
+		\item[(a)] Suppose that \( \lim_{k \to \infty} f(k + x) \to 0 \) for all \( x \in \mathbb{R} \). Is it guaranteed that \( f(x) \to 0 \) when \( x \to +\infty \)?
+		
+		\item[(b)] Suppose that \( \lim_{k \to \infty} f(kx) \to 0 \) for all \( x > 0 \). Is it guaranteed that \( f(x) \to 0 \) when \( x \to +\infty \)?
+	\end{enumerate}
+\end{problem}
+
+\begin{solution}
+		\begin{enumerate}
+		\item[(a)]I feel that for some functions, the limit behavior after integer translation cannot guarantee the overall limit, but I haven't found a counterexample yet.
+		\item[(b)] For any \( x > 0 \), as \( k \to \infty \), \( kx \to +\infty \). At this time:
+$$
+f(kx) = \sin((kx)^2). 
+$$
+ According to the Riemann - Lebesgue Lemma, for a fixed \( x \), the average value of \( \sin((kx)^2) \) as \( k \to \infty \) tends to \( 0 \). Therefore:
+		$$
+		\lim_{k \to \infty} f(kx) = 0. 
+		$$
+When \( x \to +\infty \),  \( \lim_{x \to +\infty} \sin(x^2) \) does not exist, and it will not converge to \( 0 \) at all.
+Concluding,the limit behavior of a function after integer - multiple scaling  cannot guarantee the overall limit.
+				\end{enumerate}
+		
+\end{solution}
+\begin{problem}{30}
+	Suppose that \( f \) is a continuous function over \([0, 1]\) and
+	$$
+	\int_0^x |f(t)|^2 dt \leq f(x) \quad \text{for all } x \in [0, 1].
+	$$
+	\begin{enumerate}
+		\item[(a)] Show that
+	$$
+	\min_{x \in [0, 1]} f(x) \leq 2.
+	$$
+\item[(b)] Is the bound in (a) tight or not?
+	\end{enumerate}
+\end{problem}
+
+\begin{solution}
+\begin{enumerate}
+\item[(a)]Since \(f(x)\geq m\), then \(|f(t)|^2 = f(t)^2\geq m^2\). 
+
+For the integral \(\int_{0}^{x}|f(t)|^2dt\), we can get 
+$$
+\int_{0}^{x}|f(t)|^2dt\geq\int_{0}^{x}m^2dt = m^2x.
+$$
+
+Combining with the known condition \(\int_{0}^{x}|f(t)|^2dt\leq f(x)\), we can obtain \(m^2x\leq f(x)\).
+
+Since \(f\) is continuous, differentiating both sides of \(\int_{0}^{x}|f(t)|^2dt\leq f(x)\) with respect to \(x\) , we get that \(f(x)^2\leq f^\prime(x)\), that is \(f^\prime(x)-f(x)^2\geq0\).
+
+Let \(g(x)=\frac{1}{f(x)}\) (\(f(x)>0\)), and by differentiating, we get that \(g^\prime(x)=-\frac{f^\prime(x)}{f(x)^2}\).
+
+From \(f^\prime(x)\geq f(x)^2\), we know that \(g^\prime(x)\leq - 1\).
+
+Integrating \(g(x)\) on \([0,x]\) , we get that \(g(x)-g(0)\leq -x\implies\frac{1}{f(x)}\leq\frac{1}{f(0)}-x\).
+
+If we assume \(m > 2\), then \(f(x)\geq m > 2\), so \(\frac{1}{f(x)}\leq\frac{1}{m}<\frac{1}{2}\). 
+
+In particular, when \(x = 1\), we have \(\frac{1}{m}\leq\frac{1}{f(0)}-1\).
+
+But on the other hand, from \(f^\prime(x)\geq f(x)^2\), solving the differential equation \(y^\prime = y^2\) gives the general solution \(y = \frac{1}{C - x}\) (\(C\) is a constant). 
+
+Substituting the initial condition \(f(0)=C^{-1}\), then \(f(x)=\frac{1}{\frac{1}{f(0)}-x}\).
+
+If \(m > 2\), \(f(x)\) needs to be defined on \([0,1]\). However, if \(f(0)\) is too small, \(f(x)\) will tend to infinity within \([0,1]\) (which contradicts the continuity of \(f\)) .
+
+If we derive strictly, from \(\int_{0}^{1}f(t)^2dt\leq f(1)\), substituting \(f(t)=\frac{1}{\frac{1}{f(0)}-t}\) and calculating the integral, we will find that when \(m > 2\), the inequality cannot be satisfied, and a contradiction occurs.
+
+Therefore, the assumption that \(m > 2\) does not hold, that is, \(\min_{x\in[0,1]}f(x)\leq2\).
+	
+	\item[(b)]
+	Suppose there exists an upper bound \( M < 2 \) such that for all \( f \) satisfying \( \min_{x \in [0,1]} f(x) \leq M \).
+	
+	Take \( f(x) \) satisfying \( f'(x)=f(x)^2 \) (the equality case is a limit situation, corresponding to the function closest to tightness), then \( f(x)=\frac{1}{\frac{1}{f(0)}-x} \).
+	
+	If we require \( f(x) \geq M \) to hold for all \( x \in [0,1] \), then we get
+	$$
+	\frac{1}{\frac{1}{f(0)}-x} \geq M \implies \frac{1}{f(0)}-x \leq \frac{1}{M} \implies x \geq \frac{1}{f(0)} - \frac{1}{M}.
+	$$
+	
+	When \( x = 0 \), we need \( f(0) \geq M \) , when \( x = 1 \), we need \( \frac{1}{f(0)} - 1 \leq \frac{1}{M} \implies f(0) \geq \frac{M}{M + 1} \).
+	
+	But combined with the condition \( \int_{0}^{1} f(t)^2 dt \leq f(1) \), substituting \( f(t)=\frac{1}{\frac{1}{f(0)}-t} \) and calculating that
+	$$
+	\int_{0}^{1} \frac{1}{\left( \frac{1}{f(0)} - t \right)^2} dt = \frac{1}{\frac{1}{f(0)} - 1} \leq f(1)=\frac{1}{\frac{1}{f(0)} - 1}.
+	$$
+	
+	This shows that when \( M < 2 \), we can adjust \( f(0) \) to make the minimum value on \( [0,1] \) exceed \( M \).
+	
+	Since for any \( M < 2 \), there exists a function \( f \) satisfying the conditions such that \( \min_{x \in [0,1]} f(x) > M \), but (a) has proved that \( \min_{x \in [0,1]} f(x) \leq 2 \). 
+	
+	Therefore, \( 2 \) is the optimal upper bound that cannot be further reduced, that is, the upper bound is tight.
+	
+	\end{enumerate}
+\end{solution}
+
+\begin{problem}{31}
+	Show that
+	$$
+	\min_{\|x\|_2 = 1} \|Ax\|_\infty \leq \frac{1}{n} \|A\|_F
+	$$
+	for all matrix \( A \in \mathbb{R}^{n \times n} \), or find a counterexample.
+\end{problem}
+
+\begin{solution}
+Let \( A \) as an \( n \times n \) matrix : 
+$$
+A = \begin{pmatrix} 
+	1 & 1 & \cdots & 1 \\
+	0 & 0 & \cdots & 0 \\
+	\vdots & \vdots & \ddots & \vdots \\
+	0 & 0 & \cdots & 0 
+\end{pmatrix}
+$$
+
+Then, \( \|A\|_F = \sqrt{1^2 + 1^2 + \cdots + 1^2} = \sqrt{n} \).
+ 
+For a vector \( x \) with \( \|x\|_2 = 1 \), \( \|Ax\|_{\infty} = |x_1 + x_2 + \cdots + x_n| \).
+
+By the Cauchy-Schwarz inequality , we have
+$$|x_1 + \cdots + x_n| \leq \sqrt{n} \cdot \|x\|_2 = \sqrt{n} \cdot 1 = \sqrt{n} .$$
+
+When \( x = \left( \frac{1}{\sqrt{n}}, \frac{1}{\sqrt{n}}, \dots, \frac{1}{\sqrt{n}} \right)^T \) (satisfying \( \|x\|_2 = 1 \),  \( \sqrt{n \cdot \left( \frac{1}{\sqrt{n}} \right)^2} = 1 \)):
+$$
+\|Ax\|_{\infty} = \left| n \cdot \frac{1}{\sqrt{n}} \right| = \sqrt{n}.
+$$
+
+The right-hand side of the original inequality is 
+$$ \frac{1}{n}\|A\|_F = \frac{1}{n} \cdot \sqrt{n} = \frac{1}{\sqrt{n}} .$$
+
+When \( n \geq 2 \), \( \sqrt{n} > \frac{1}{\sqrt{n}} \).
+
+Thus, there exists an \( x \) such that \( \|Ax\|_{\infty} > \frac{1}{n}\|A\|_F \), so the original inequality does not hold.
+\end{solution}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
