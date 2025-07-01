@@ -6,9 +6,11 @@ jobs:
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v4
-      - name: Compile LaTeX document
+      - name: SAA_hw09
         uses: xu-cheng/latex-action@v3
         with:
+          latexmk_shell_escape: true
+          latexmk_use_lualatex: true
           root_file: SAA_hw09.tex
       - name: Upload PDF file
         uses: actions/upload-artifact@v4
