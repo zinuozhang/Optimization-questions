@@ -6,32 +6,20 @@ jobs:
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v4
-      
-      - name: Install Chinese Fonts and Dependencies
+      - name: Install Chinese Fonts
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            fonts-noto-cjk \                  # 安装 Noto 中文字体
-            texlive-xetex \                   # XeLaTeX 引擎
-            texlive-lang-chinese \            # 中文语言包
-            texlive-fonts-extra \             # 额外字体
-            texlive-latex-extra               # 额外 LaTeX 包
-      
-      - name: Build LaTeX Document with XeLaTeX
+          sudo apt-get install -y fonts-noto-cjk  # 安装 Noto CJK 中文字体
+      - name: Install Extra LaTeX Packages
+        run: |
+          sudo apt-get install -y texlive-lang-chinese  # 中文语言包
+          sudo apt-get install -y texlive-fonts-extra   # 额外字体包
+      - name: SAA_hw09
         uses: xu-cheng/latex-action@v3
         with:
           root_file: SAA_hw09.tex
-          latexmk_use_xelatex: true          # 强制使用 XeLaTeX 引擎
-          args: "-xelatex -file-line-error -interaction=nonstopmode"  # 编译参数
-      
       - name: Upload PDF file
         uses: actions/upload-artifact@v4
         with:
           name: PDF
           path: SAA_hw09.pdf
-      
-      - name: Debug Log (if failed)
-        if: failure()
-        run: |
-          echo "=== LaTeX Compile Log ==="
-          cat SAA_hw09.log
