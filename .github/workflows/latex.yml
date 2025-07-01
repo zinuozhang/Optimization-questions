@@ -10,8 +10,7 @@ jobs:
         uses: xu-cheng/latex-action@v3
         with:
           latexmk_shell_escape: true
-          latexmk_use_lualatex: true
-          latexmk_use_amsmath: true
+          ctan_packages: amsmath graphicx
           root_file: SAA_hw09.tex
       - name: Upload PDF file
         uses: actions/upload-artifact@v4
