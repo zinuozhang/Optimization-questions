@@ -1,38 +1,18 @@
-name: Build LaTeX PDF
-on:
-  push:
-    branches:
-      - main
-
+name: Build LaTeX document
+on: [push]
 jobs:
-  build-pdf:
-    runs-on: windows-latest
-
+  build_latex:
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Set up Git repository
         uses: actions/checkout@v4
-
-      - name: Set up TeX Live
-        uses:  thomas-chauvet/latex2pdf-action@1.1.0
-        with:
-          teTeX: false
-          scheme: full
-
       - name: Compile LaTeX document
-        run: latexmk -pdf -interaction=nonstopmode <SAA_hw09.tex>
-        env:
-          LANG: en_US.UTF-8 
-          LC_ALL: en_US.UTF-8
-
-      - name: Archive PDF
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: main.tex
+      - name: Upload PDF file
         uses: actions/upload-artifact@v4
         with:
-          name: generated-pdf
-          path: <SAA_hw09.pdf>
-
-      - name: Spell check files
-        run: |
-          sudo apt-get update
-          sudo apt-get install aspell -y
-          aspell -c --lang=en_US <SAA_hw09.tex>  
+          name: PDF
+          path: main.pdf
  
