@@ -7,7 +7,7 @@ jobs:
       - name: Set up Git repository
         uses: actions/checkout@v4
       - name: Install Fandol Fonts
-        run: 
+        run: |
          sudo apt-get update
          sudo apt-get install -y fonts-fandol  
       - name: Clean previous files
