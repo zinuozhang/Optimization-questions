@@ -1,5 +1,4 @@
-
- name: LaTeX
+name: LaTeX
 on: [push]
 jobs:
   build_latex:
