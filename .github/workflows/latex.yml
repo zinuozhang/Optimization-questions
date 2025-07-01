@@ -1,5 +1,38 @@
-  - name: latex2pdf
-  uses: thomas-chauvet/latex2pdf-action@1.1.0
-  with:
-    main_latex_file: SAA_hw09.tex
+name: Build LaTeX PDF
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-pdf:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up TeX Live
+        uses: takahashikz/setup-texlive@v14
+        with:
+          teTeX: false
+          scheme: full
+
+      - name: Compile LaTeX document
+        run: latexmk -pdf -interaction=nonstopmode <SAA_hw09.tex>
+        env:
+          LANG: en_US.UTF-8 
+          LC_ALL: en_US.UTF-8
+
+      - name: Archive PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-pdf
+          path: <SAA_hw09.pdf>
+
+      - name: Spell check files
+        run: |
+          sudo apt-get update
+          sudo apt-get install aspell -y
+          aspell -c --lang=en_US <SAA_hw09.tex>  
  
