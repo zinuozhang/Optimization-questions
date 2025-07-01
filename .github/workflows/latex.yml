@@ -1,6 +1,22 @@
-- name: latex2pdf
-  uses: thomas-chauvet/latex2pdf-action@1.1.0
-  with:
-    main_latex_file: SAA_hw09.tex
-    ctan_packages: amsmath graphicx
-    toc: true
+name: Build LaTeX PDF
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Compile LaTeX to PDF
+        uses: thomas-chauvet/latex2pdf-action@1.1.0
+        with:
+          main_latex_file: SAA_hw09.tex
+          ctan_packages: amsmath graphicx tikz  
+          latex_engine: pdflatex 
+      
+      - name: Upload PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: pdf
+          path: SAA_hw09.pdf
