@@ -9,7 +9,7 @@ jobs:
         uses: actions/checkout@v4 
         
       - name: Set up LaTeX environment
-        uses: texlive/texlive-action@latest  
+        uses: texlive/texlive-action@v4  
         with:
           run: latexmk -pdf -interaction=nonstopmode SAA_hw09.tex  
           
