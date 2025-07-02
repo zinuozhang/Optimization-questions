@@ -5,7 +5,7 @@
 \usepackage{fullpage} % changes the margin
 \usepackage[a4paper, total={7in, 10in}]{geometry}
 \usepackage[fleqn]{amsmath}
-\usepackage{amssymb,amsthm}  % assumes amsmath package installed
+\usepackage{amssymb,amsthm} % assumes amsmath package installed
 \newtheorem{theorem}{Theorem}
 \newtheorem{corollary}{Corollary}
 \usepackage{graphicx}
@@ -158,13 +158,12 @@ $$
 f(x) - f(y) = \int_0^1 \nabla f(y + t(x - y))^\top (x - y) \, dt.
 $$
 Subtract \( \nabla f(x)^\top (x - y) \) from both sides:
-$$
 \begin{align*}
-	f(x) - f(y) - \nabla f(x)^\top (x - y) 
-	&= \int_0^1 \left[ \nabla f(y + t(x - y)) - \nabla f(x) \right]^\top (x - y) \, dt \\
-	&= \int_0^1 \phi(t) \, dt \quad \text{where } \phi(t) = \left[ \nabla f(y + t(x - y)) - \nabla f(x) \right]^\top (x - y).
+	f(x) - f(y) - \nabla f(x)^{\top} (x - y) 
+	&= \int_0^1 \left[ \nabla f(y + t(x - y)) - \nabla f(x) \right]^{\top} (x - y)  dt \\
+	&= \int_0^1 \phi(t)  dt 
 \end{align*}
-$$
+where $\phi(t) = \left[ \nabla f(y + t(x - y)) - \nabla f(x) \right]^{\top} (x - y)$.
 
 By the \( L \)-Lipschitz continuity of \( \nabla f \):
 $$
@@ -336,13 +335,12 @@ $$
 A convex function satisfies : For \( \lambda \in [0, 1] \), it holds that \( f(\lambda x + (1 - \lambda)y) \leq \lambda f(x) + (1 - \lambda)f(y) \).  
 
 Substitute \( x = x_k \) and \( \lambda = \lambda_k \). Then, calculate as follows:  
-$$
 \begin{align*}
-	\lambda_k f(x_k) + (1 - \lambda_k)f(y) &= f(y) + \lambda_k \left( f(x_k) - f(y) \right) \\
+	\lambda_k f(x_k) + (1 - \lambda_k)f(y) 
+	&= f(y) + \lambda_k \left( f(x_k) - f(y) \right) \\
 	&= f(y) + \frac{t_0 - f(y)}{f(x_k) - f(y)} \cdot \left( f(x_k) - f(y) \right) \\
 	&= t_0.
 \end{align*}
-$$
 
 Thus,\( f(z_k) \leq t_0 \), hence \( z_k \in \mathcal{L}(t_0) \).
 	
@@ -474,7 +472,9 @@ $$
 	$$\| d \|_2^2 - 2t\langle d, \nabla f(x) \rangle + t^2\|\nabla f(x)\|_2^2 \leq \| d \|_2^2.$$  
 
 	So we need to show:  
-	$$-2t\langle d, \nabla f(x) \rangle + t^2\|\nabla f(x)\|_2^2 \leq 0 \tag{1}.$$  
+$$
+	-2t \langle d, \nabla f(x) \rangle + t^2 \|\nabla f(x)\|_2^2 \leq 0.
+$$
 	
 	Since \(x^*\) is the minimizer of \(f\) and \(f\) is differentiable and convex, by the first-order optimality condition for convex functions,we have  
 	$$\nabla f(x^*) = 0.$$  
@@ -494,13 +494,18 @@ $$
 	$$\|\nabla f(x)\|_2 = \|\nabla f(x) - \nabla f(x^*)\|_2 \leq L\|x - x^*\|_2 = L\|d\|_2.$$
 	  
 	Squaring both sides,we get 
-	$$\|\nabla f(x)\|_2^2 \leq L^2\|d\|_2^2 \tag{2}.$$  
+$$
+	\|\nabla f(x)\|_2^2 \leq L^2\|d\|_2^2 .  
+$$
 	 
 	Using the L-Lipschitz continuity again,
 	$$\langle \nabla f(x) - \nabla f(x^*), d \rangle \leq \|\nabla f(x) - \nabla f(x^*)\|_2 \cdot \|d\|_2 \leq L\|d\|_2^2.$$  
 	
 	Since \(\nabla f(x^*) = 0\), we have
-	$$\langle \nabla f(x), d \rangle \leq L\|d\|_2^2 \tag{3}.$$  
+$$	
+	\langle \nabla f(x), d \rangle \leq L\|d\|_2^2 . 
+$$
+	
 \end{solution}
 
 \begin{problem}{6}
@@ -657,21 +662,17 @@ n(1 - t)\ln\left( \frac{1 - t - s}{1 - t} \right) - nt\ln\left( \frac{t}{t + s} 
 $$
 
 For \( \ln\left( \frac{1 - t - s}{1 - t} \right) = \ln\left( 1 - \frac{s}{1 - t} \right) \) and \( \ln\left( \frac{t}{t + s} \right) = \ln\left( 1 - \frac{s}{t + s} \right) \), use the inequality \( \ln(1 - x) \leq -x - \frac{x^2}{2} \) (which holds when \( x > 0 \)):
-$$
 \begin{align*}
 	(1 - t)\ln\left( 1 - \frac{s}{1 - t} \right) &\leq (1 - t)\left( -\frac{s}{1 - t} - \frac{1}{2} \cdot \frac{s^2}{(1 - t)^2} \right) = -s - \frac{s^2}{2(1 - t)} ,\\
 	-t\ln\left( 1 - \frac{s}{t + s} \right) &\leq -t\left( -\frac{s}{t + s} - \frac{1}{2} \cdot \frac{s^2}{(t + s)^2} \right) = \frac{ts}{t + s} + \frac{ts^2}{2(t + s)^2}.
 \end{align*}
-$$
 
 Add the two parts together,we get
-$$
 \begin{align*}
 	&(1 - t)\ln\left( \frac{1 - p}{1 - t} \right) - t\ln\left( \frac{t}{p} \right) \\
 	&\leq -s - \frac{s^2}{2(1 - t)} + \frac{ts}{t + s} + \frac{ts^2}{2(t + s)^2} \\
 	&= -s + \frac{ts}{t + s} + s^2\left( -\frac{1}{2(1 - t)} + \frac{t}{2(t + s)^2} \right)
 \end{align*}
-$$
 
 When \( t \in [0, p] \), \( 1 - t \geq 1 - p \), and it can be proved that:
 $$
@@ -821,12 +822,10 @@ $$
 And, \( S''(p)=\sum_{i = 1}^n|x_i|^p(\log|x_i|)^2 \).
 
 Add the two parts of the derivatives and simplify to get that 
-$$
 \begin{align*}
 	f''(p)&=\frac{2\log S(p)}{p^3}-\frac{S'(p)}{p^2\cdot S(p)}+\frac{S''(p)\cdot p\cdot S(p)-S'(p)\cdot(S(p)+p\cdot S'(p))}{(p\cdot S(p))^2}\\
 	&=\frac{2\log S(p)}{p^3}-\frac{2S'(p)}{p^2\cdot S(p)}+\frac{S''(p)}{p\cdot S(p)}-\frac{(S'(p))^2}{(p\cdot S(p))^2}.
 \end{align*}
-$$
 
 Consider the vectors 
 $$
