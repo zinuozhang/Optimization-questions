@@ -7,39 +7,35 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install minimal TeX Live with latexmk
+      - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            texlive-latex-base \
-            texlive-latex-recommended \
-            texlive-fonts-recommended \
-            texlive-xetex \
+            texlive-full \
             latexmk \
-            fonts-noto-cjk
+            fonts-noto-cjk \
+            aspell \
+            aspell-en
           sudo apt-get clean
 
-      - name: Set up latexmk configuration
+      - name: Spellcheck with aspell
         run: |
-          mkdir -p $HOME/.latexmk
-          cat << 'EOF' > $HOME/.latexmkrc
-          # 配置 XeLaTeX 为默认引擎
-          $pdf_mode = 1;
-          $pdflatex = 'xelatex --synctex=1 %O %S';
-          $dvi_mode = 0;
-          $postscript_mode = 0;
-          
-          # 自动处理引用和交叉引用
-          $bibtex_use = 2;
-          $max_repeat = 5;
-          
-          # 清理中间文件
-          @generated_exts = (@generated_exts, 'synctex.gz');
-          EOF
+          for file in *.tex; do
+            echo "🔍 Spellchecking $file..."
+            aspell --lang=en --mode=tex list < "$file" | sort | uniq > "${file%.tex}.spellerrors"
+            
+            if [ -s "${file%.tex}.spellerrors" ]; then
+              echo "::warning::Spelling errors found in $file"
+              echo "❌ Misspelled words:"
+              cat "${file%.tex}.spellerrors"
+            else
+              echo "✅ No spelling errors found in $file"
+            fi
+          done
 
       - name: Compile with latexmk
         run: |
-          latexmk -pdf -f SAA_hw09.tex
+          latexmk -xelatex -synctex=1 -interaction=nonstopmode SAA_hw09.tex
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
