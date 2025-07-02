@@ -260,7 +260,7 @@ $$
 	
 	At a local minimum \( x_0 \):
 	
-\( \nabla q(x_0) = Ax_0 - b = 0 \), so \( b = Ax_0 \) ，hence \( b \in \operatorname{range}(A) \).  
+\( \nabla q(x_0) = Ax_0 - b = 0 \) , so \( b = Ax_0 \) ,hence \( b \in \operatorname{range}(A) \). 
 	
 Thus,the Hessian \( \nabla^2 q(x) = A \) .
 	
@@ -276,9 +276,9 @@ q(tz) = \frac{1}{2}t^2 (z^{\mathrm{T}}Az) - t(b^{\mathrm{T}}z)
 $$
 tends to \( -\infty \) as \( t \to \pm\infty \), contradicting boundedness. Thus, \( A \succeq 0 \).
 
-Let \( x = Uy \)，where \( U \) is an orthogonal matrix. 
+Let \( x = Uy \), where \( U \) is an orthogonal matrix.
 
-And let \( \Lambda = \text{diag}(\lambda_1, \ldots, \lambda_n) \) is a diagonal matrix of eigenvalues, and \( \lambda_i \geq 0 \) (since \( A \succeq 0 \)) ，then
+And let \( \Lambda = \text{diag}(\lambda_1, \ldots, \lambda_n) \) is a diagonal matrix of eigenvalues, and \( \lambda_i \geq 0 \) (since \( A \succeq 0 \)), then
 $$
 x^{\mathrm{T}}Ax = y^{\mathrm{T}}U^{\mathrm{T}}AUy = y^{\mathrm{T}}\Sigma y = \sum_{i=1}^n \lambda_i y_i^2,
 $$ 
@@ -1240,7 +1240,7 @@ $$
     U_1 \Sigma U_1^H - U_2\Sigma U_2^H = 0,  V_1\Sigma V_1^H - V_2\Sigma V_2^H = 0.
 $$
 
-\(J\) is a conjugate - symmetric matrix:
+\(J\) is a conjugate-symmetric matrix:
 $$
 J^H=\begin{pmatrix}0&A\\A^H&0\end{pmatrix}^H=\begin{pmatrix}0&A^H\\A&0\end{pmatrix}^H=\begin{pmatrix}0&A\\A^H&0\end{pmatrix}=J.
 $$
@@ -1406,19 +1406,19 @@ $$
 
 Given \( f(\lambda x_1 + (1 - \lambda) x_2) \leq \lambda f(x_1) + (1 - \lambda) f(x_2), \lambda \in (0,1) \)  
 	
-Take \( x_1 = t + \frac{1}{2} \)，\( x_2 = -t + \frac{1}{2} \)，\( t \in \left[0, \frac{1}{2}\right] \)  
+Take \( x_1 = t + \frac{1}{2} \), \( x_2 = -t + \frac{1}{2} \), \( t \in \left[0, \frac{1}{2}\right] \)  
 	
-Let \( \lambda = \frac{1}{2} \)，then：  
+Let \( \lambda = \frac{1}{2} \), then: 
 $$
 	f\left( \frac{1}{2}(x_1 + x_2) \right) \leq \frac{1}{2} f(x_1) + \frac{1}{2} f(x_2)
 $$ 
 
-Substitute \( x_1, x_2 \)：  
+Substitute \( x_1, x_2 \): 
 $$
 	f\left( \frac{1}{2} \right) \leq \frac{1}{2} f\left( t + \frac{1}{2} \right) + \frac{1}{2} f\left( -t + \frac{1}{2} \right)
 $$  
 	
-Integrate both sides：  
+Integrate both sides:
 $$
 	\int_{0}^{\frac{1}{2}} f\left( \frac{1}{2} \right) dt = f\left( \frac{1}{2} \right) \cdot \left( \frac{1}{2} - 0 \right) = \frac{1}{2} f\left( \frac{1}{2} \right)
 $$ 
@@ -1426,7 +1426,7 @@ $$
 	\int_{0}^{\frac{1}{2}} \left[ \frac{1}{2} f\left( t + \frac{1}{2} \right) + \frac{1}{2} f\left( -t + \frac{1}{2} \right) \right] dt= \frac{1}{2} \int_{\frac{1}{2}}^{1} f(x) dx + \frac{1}{2} \int_{0}^{\frac{1}{2}} f(x) dx \quad = \frac{1}{2} \int_{0}^{1} f(x) dx
 $$
 
-	Thus：  
+	Thus:  
 $$
 	\frac{1}{2} f\left( \frac{1}{2} \right) \leq \frac{1}{2} \int_{0}^{1} f(x) dx
 $$ 
@@ -1434,12 +1434,12 @@ $$
 	f\left( \frac{1}{2} \right) \leq \int_{0}^{1} f(x) \, dx
 $$ 
 	
-Take \( (0, f(0)) \)，\( (1, f(1)) \)，then
+Take \( (0, f(0)) \), \( (1, f(1)) \), then
 $$
 	f(x) \leq \lambda f(1) + (1 - \lambda) f(0), \quad \lambda \in (0,1), \, x \in [0,1]
 $$ 
 
-Integrate both sides：  
+Integrate both sides:  
 $$
 	\int_{0}^{1} f(x) dx \leq \int_{0}^{1} \left[ \lambda f(1) + (1 - \lambda) f(0) \right] d\lambda
 $$ 
@@ -1449,7 +1449,7 @@ $$
 	= \frac{1}{2} \left[ f(0) + f(1) \right]
 $$
 
-Thus：  
+Thus:  
 $$
 	\int_{0}^{1} f(x) \, dx \leq \frac{1}{2} \left[ f(0) + f(1) \right]
 $$
