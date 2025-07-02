@@ -7,17 +7,41 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install LaTeX dependencies
+      - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y texlive-full 
-          sudo apt-get install -y fonts-noto-cjk fonts-arphic-ukai fonts-arphic-uming
+          sudo apt-get install -y \
+            texlive-full \
+            fonts-noto-cjk \
+            fonts-arphic-ukai \
+            fonts-arphic-uming \
+            aspell \
+            aspell-en
           sudo apt-get clean
 
-      - name: Compile with XeLaTeX (允许错误)
+      - name: Spellcheck with aspell
         run: |
-          # 强制编译两次以解决引用问题
+          # 检查所有 .tex 文件
+          for file in *.tex; do
+            echo "Spellchecking $file..."
+            # 只检查英文单词，忽略 LaTeX 命令
+            aspell --lang=en --mode=tex list < "$file" | sort | uniq > "${file%.tex}.spellerrors"
+            
+            # 如果有错误则显示
+            if [ -s "${file%.tex}.spellerrors" ]; then
+              echo "::warning::Spelling errors found in $file"
+              echo "Misspelled words:"
+              cat "${file%.tex}.spellerrors"
+            else
+              echo "No spelling errors found in $file"
+            fi
+          done
+
+      - name: Compile with XeLaTeX
+        run: |
+          # 第一次编译
           xelatex -synctex=1 -interaction=nonstopmode SAA_hw09.tex || true
+          # 第二次编译解决引用问题
           xelatex -synctex=1 -interaction=nonstopmode SAA_hw09.tex || true
 
       - name: Upload PDF artifact
