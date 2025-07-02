@@ -7,38 +7,38 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install dependencies
+      - name: Install minimal TeX dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            texlive-full \
-            fonts-noto-cjk \
-            fonts-arphic-ukai \
-            fonts-arphic-uming \
+            texlive-base \
+            texlive-latex-recommended \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            latexmk \
             aspell \
             aspell-en
           sudo apt-get clean
+
       - name: Spellcheck with aspell
         run: |
-          # 检查所有 .tex 文件
           for file in *.tex; do
-            echo "Spellchecking $file..."
-            # 只检查英文单词，忽略 LaTeX 命令
+            echo "🔍 Spellchecking $file..."
             aspell --lang=en --mode=tex list < "$file" | sort | uniq > "${file%.tex}.spellerrors"
             
-            # 如果有错误则显示
             if [ -s "${file%.tex}.spellerrors" ]; then
               echo "::warning::Spelling errors found in $file"
-              echo "Misspelled words:"
+              echo "❌ Misspelled words:"
               cat "${file%.tex}.spellerrors"
             else
-              echo "No spelling errors found in $file"
+              echo "✅ No spelling errors found in $file"
             fi
           done
+
       - name: Compile with latexmk
         run: |
-         latexmk -pdf -f SAA_hw09.tex
-         
+          latexmk -pdf -f -interaction=nonstopmode SAA_hw09.tex
+
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
