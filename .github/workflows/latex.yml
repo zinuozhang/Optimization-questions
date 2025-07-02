@@ -12,45 +12,33 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y \
             texlive-full \
-            latexmk \
             fonts-noto-cjk \
-            fonts-wqy-zenhei \
             fonts-arphic-ukai \
             fonts-arphic-uming \
-            fonts-arphic-gbsn00lp \
-            fonts-arphic-bsmi00lp \
-            fonts-arphic-gkai00mp \
-            fonts-arphic-bkai00mp \
             aspell \
             aspell-en
           sudo apt-get clean
-
       - name: Spellcheck with aspell
         run: |
+          # 检查所有 .tex 文件
           for file in *.tex; do
-            echo "🔍 Spellchecking $file..."
+            echo "Spellchecking $file..."
+            # 只检查英文单词，忽略 LaTeX 命令
             aspell --lang=en --mode=tex list < "$file" | sort | uniq > "${file%.tex}.spellerrors"
             
+            # 如果有错误则显示
             if [ -s "${file%.tex}.spellerrors" ]; then
               echo "::warning::Spelling errors found in $file"
-              echo "❌ Misspelled words:"
+              echo "Misspelled words:"
               cat "${file%.tex}.spellerrors"
             else
-              echo "✅ No spelling errors found in $file"
+              echo "No spelling errors found in $file"
             fi
           done
-
       - name: Compile with latexmk
         run: |
-          # 设置中文字体环境变量
-          export OSFONTDIR="/usr/share/fonts//"
-          
-          # 预编译生成字体缓存
-          xelatex -no-pdf -interaction=nonstopmode SAA_hw09.tex || true
-          
-          # 正式编译
-          latexmk -xelatex -synctex=1 -interaction=nonstopmode -f SAA_hw09.tex
-
+         latexmk -pdf -f SAA_hw09.tex
+         
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
