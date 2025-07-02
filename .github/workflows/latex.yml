@@ -7,42 +7,39 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install dependencies
+      - name: Install minimal TeX Live with latexmk
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            texlive-full \
-            fonts-noto-cjk \
-            fonts-arphic-ukai \
-            fonts-arphic-uming \
-            aspell \
-            aspell-en
+            texlive-latex-base \
+            texlive-latex-recommended \
+            texlive-fonts-recommended \
+            texlive-xetex \
+            latexmk \
+            fonts-noto-cjk
           sudo apt-get clean
 
-      - name: Spellcheck with aspell
+      - name: Set up latexmk configuration
         run: |
-          # 检查所有 .tex 文件
-          for file in *.tex; do
-            echo "Spellchecking $file..."
-            # 只检查英文单词，忽略 LaTeX 命令
-            aspell --lang=en --mode=tex list < "$file" | sort | uniq > "${file%.tex}.spellerrors"
-            
-            # 如果有错误则显示
-            if [ -s "${file%.tex}.spellerrors" ]; then
-              echo "::warning::Spelling errors found in $file"
-              echo "Misspelled words:"
-              cat "${file%.tex}.spellerrors"
-            else
-              echo "No spelling errors found in $file"
-            fi
-          done
+          mkdir -p $HOME/.latexmk
+          cat << 'EOF' > $HOME/.latexmkrc
+          # 配置 XeLaTeX 为默认引擎
+          $pdf_mode = 1;
+          $pdflatex = 'xelatex --synctex=1 %O %S';
+          $dvi_mode = 0;
+          $postscript_mode = 0;
+          
+          # 自动处理引用和交叉引用
+          $bibtex_use = 2;
+          $max_repeat = 5;
+          
+          # 清理中间文件
+          @generated_exts = (@generated_exts, 'synctex.gz');
+          EOF
 
-      - name: Compile with XeLaTeX
+      - name: Compile with latexmk
         run: |
-          # 第一次编译
-          xelatex -synctex=1 -interaction=nonstopmode SAA_hw09.tex || true
-          # 第二次编译解决引用问题
-          xelatex -synctex=1 -interaction=nonstopmode SAA_hw09.tex || true
+          latexmk -pdf -f SAA_hw09.tex
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
